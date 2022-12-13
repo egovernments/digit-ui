@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "start": "microbundle-crl watch --no-compress --format modern,cjs",
+    "start": "microbundle-crl --compress --no-sourcemap --format cjs",
     "build": "microbundle-crl --no-compress --format modern,cjs",
     "prepublish": "yarn build"
   },

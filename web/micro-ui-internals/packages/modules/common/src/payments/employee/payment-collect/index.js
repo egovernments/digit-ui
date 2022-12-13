@@ -35,8 +35,7 @@ export const CollectPayment = (props) => {
   const [formState, setFormState] = useState({});
   const [toast, setToast] = useState(null);
 
-  const isFsm = location?.pathname?.includes("fsm") || location?.pathname?.includes("FSM");
-
+  const isFsm = window?.location?.pathname?.includes("fsm") || window?.location?.pathname?.includes("FSM");
   const defaultPaymentModes = [
     { code: "CASH", label: t("COMMON_MASTERS_PAYMENTMODE_CASH") },
     { code: "CHEQUE", label: t("COMMON_MASTERS_PAYMENTMODE_CHEQUE") },

@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-react-components",
-  "version": "1.5.5-fsm.1.2.1",
+  "version": "1.5.10-fsm.1.2.1",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
@@ -11,7 +11,7 @@
   "scripts": {
     "example": "cd example && npm run start",
     "build": "microbundle-crl --no-compress --format modern,cjs",
-    "start": "microbundle-crl watch --no-compress --format modern,cjs",
+    "start": "microbundle-crl --compress --no-sourcemap --format cjs",
     "prepare": "yarn build",
     "predeploy": "cd example && yarn install && yarn run build",
     "deploy": "gh-pages -d example/build",
