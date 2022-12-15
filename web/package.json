@@ -4,8 +4,9 @@
   "private": true,
   "homepage": "/digit-ui",
   "workspaces": [
-    "digit-ui-internals/packages/*",
-    "digit-ui-internals/packages/modules/*"
+    "micro-ui-internals/packages/libraries",
+    "micro-ui-internals/packages/react-components",
+    "micro-ui-internals/packages/modules/*"
   ],
   "dependencies": {
     "@egovernments/digit-ui-css": "1.5.7",
