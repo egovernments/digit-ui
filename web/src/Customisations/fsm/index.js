@@ -6,8 +6,6 @@ import ApplicationDetails from "./pages/citizen/ApplicationDetails";
 import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails/ApplicationDetails";
 import FstpOperations from "./pages/employee/FstpOperations";
 import SelectTripData from "./pageComponents/SelectTripData";
-import { NewApplication } from "./pages/employee/NewApplication";
-import EditApplication from "./pages/employee/EditApplication";
 import FSMCard from "./components/FsmCard";
 import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 import SelectChannel from "./pageComponents/SelectChannel";
@@ -24,8 +22,6 @@ export const fsmComponents = {
   FSMEmployeeApplicationDetails: EmployeeApplicationDetails,
   FstpOperations: FstpOperations,
   SelectTripData,
-  FSMNewApplicationEmp: NewApplication,
-  FSMEditApplication: EditApplication,
   FSMCard,
   FSMFstpOperatorDetails: FstpOperatorDetails,
   SelectChannel: SelectChannel,
