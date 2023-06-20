@@ -96,6 +96,9 @@ const Response = ({ data, onSuccess }) => {
           gramPanchayat,
           village,
           propertyLocation,
+          newLocality,
+          newGramPanchayat,
+          newVillage,
         } = address;
         setPaymentPreference(selectPaymentPreference?.code);
         const advanceAmount =
@@ -123,10 +126,14 @@ const Response = ({ data, onSuccess }) => {
                   code: gramPanchayat?.code,
                   name: gramPanchayat?.name,
                 },
-                village: {
-                  code: village?.code ? village?.code : "",
-                  name: village?.name ? village?.name : "",
-                },
+                village: village?.code
+                  ? {
+                      code: village?.code ? village?.code : "",
+                      name: village?.name ? village?.name : "",
+                    }
+                  : newVillage,
+                newLocality: newLocality,
+                newGramPanchayat: newGramPanchayat,
               },
               street: street?.trim(),
               doorNo: doorNo?.trim(),
@@ -167,7 +174,10 @@ const Response = ({ data, onSuccess }) => {
               : "",
             additionalDetails: {
               totalAmount: amount,
-              tripAmount: JSON.stringify(amountPerTrip),
+              tripAmount:
+                typeof amountPerTrip === "number"
+                  ? JSON.stringify(amountPerTrip)
+                  : amountPerTrip,
             },
             advanceAmount:
               typeof advanceAmount === "number"
