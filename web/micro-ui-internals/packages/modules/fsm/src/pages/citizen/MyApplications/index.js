@@ -1,5 +1,5 @@
 import React from "react";
-import { Header, Loader } from "@egovernments/digit-ui-react-components";
+import { Header, Loader, Card } from "@egovernments/digit-ui-react-components";
 import MyApplication from "./MyApplication";
 import { useTranslation } from "react-i18next";
 
@@ -8,7 +8,12 @@ export const MyApplications = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { info: userInfo } = Digit.UserService.getUser();
 
-  const { isLoading, isError, error, data: { data: { table: applicationsList } = {} } = {} } = Digit.Hooks.fsm.useSearchAll(tenantId, {
+  const {
+    isLoading,
+    isError,
+    error,
+    data: { data: { table: applicationsList } = {} } = {},
+  } = Digit.Hooks.fsm.useSearchAll(tenantId, {
     uuid: userInfo.uuid,
     limit: 100,
   });
@@ -27,6 +32,11 @@ export const MyApplications = () => {
               <MyApplication application={application} />
             </div>
           ))}
+        {applicationsList.length === 0 && (
+          <Card>
+            <p style={{ textAlign: "center" }}>{`${t("FSM_NO_APPLICATION")} ${userInfo.mobileNumber}`}</p>
+          </Card>
+        )}
       </div>
     </React.Fragment>
   );
