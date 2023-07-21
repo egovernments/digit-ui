@@ -10,17 +10,19 @@ const getRequest = (type, code, requestDate, filters, moduleLevel = "", addlFilt
       acc[curr] = newFilter[curr];
       return acc;
     }, {});
-  return {
-    aggregationRequestDto: {
-      visualizationType: type.toUpperCase(),
-      visualizationCode: code,
-      queryType: "",
-      filters: updatedFilter,
-      moduleLevel: moduleLevel,
-      aggregationFactors: null,
-      requestDate,
-    },
+  let aggregationRequestDto = {
+    visualizationType: type.toUpperCase(),
+    visualizationCode: code,
+    queryType: "",
+    filters: updatedFilter,
+    moduleLevel: moduleLevel,
+    aggregationFactors: null,
+    requestDate,
   };
+  if (moduleLevel === "FSM") {
+    aggregationRequestDto.source = "es";
+  }
+  return { aggregationRequestDto };
 };
 const defaultSelect = (data) => {
   if (data?.responseData) {
