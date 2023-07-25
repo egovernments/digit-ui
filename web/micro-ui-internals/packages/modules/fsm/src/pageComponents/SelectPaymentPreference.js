@@ -12,7 +12,13 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/TLTimelineInFSM";
 
-const SelectPaymentPreference = ({ config, formData, t, onSelect, userType }) => {
+const SelectPaymentPreference = ({
+  config,
+  formData,
+  t,
+  onSelect,
+  userType,
+}) => {
   const tenantId = Digit.ULBService.getCitizenCurrentTenant();
   const stateId = Digit.ULBService.getStateId();
   const [advanceAmount, setAdvanceAmount] = useState(null);
@@ -59,20 +65,33 @@ const SelectPaymentPreference = ({ config, formData, t, onSelect, userType }) =>
         const capacity = formData?.selectTripNo?.vehicleCapacity.capacity;
         const { slum: slumDetails } = formData.address;
         const slum = slumDetails ? "YES" : "NO";
-        const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, {
-          propertyType: formData?.subtype?.code,
-          capacity,
-          slum,
-        });
+        const billingDetails = await Digit.FSMService.billingSlabSearch(
+          tenantId === formData?.address?.city?.code
+            ? tenantId
+            : formData?.address?.city?.code,
+          {
+            propertyType: formData?.subtype?.code,
+            capacity,
+            slum,
+          }
+        );
 
-        const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
+        const billSlab =
+          billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
         Digit.SessionStorage.set("amount_per_trip", billSlab.price);
 
         if (billSlab?.price) {
-          let totaltripAmount = billSlab.price * formData?.selectTripNo?.tripNo?.code;
-          const { advanceAmount: advanceBalanceAmount } = await Digit.FSMService.advanceBalanceCalculate(tenantId, {
-            totalTripAmount: totaltripAmount,
-          });
+          let totaltripAmount =
+            billSlab.price * formData?.selectTripNo?.tripNo?.code;
+          const { advanceAmount: advanceBalanceAmount } =
+            await Digit.FSMService.advanceBalanceCalculate(
+              tenantId === formData?.address?.city?.code
+                ? tenantId
+                : formData?.address?.city?.code,
+              {
+                totalTripAmount: totaltripAmount,
+              }
+            );
           setMinAmount(advanceBalanceAmount);
           setTotalAmount(totaltripAmount);
           Digit.SessionStorage.set("total_amount", totaltripAmount);
@@ -122,11 +141,21 @@ const SelectPaymentPreference = ({ config, formData, t, onSelect, userType }) =>
         config={config}
         onSelect={onSubmit}
         onSkip={onSkip}
-        isDisabled={currentValue > max ? true : false || currentValue < min ? true : false}
+        isDisabled={
+          currentValue > max ? true : false || currentValue < min ? true : false
+        }
         t={t}
       >
-        <KeyNote keyValue={t("ADV_TOTAL_AMOUNT") + " (₹)"} note={formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT" ? "N/A" : max} />
-        {formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT" && (
+        <KeyNote
+          keyValue={t("ADV_TOTAL_AMOUNT") + " (₹)"}
+          note={
+            formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT"
+              ? "N/A"
+              : max
+          }
+        />
+        {formData?.address?.propertyLocation?.code ===
+          "FROM_GRAM_PANCHAYAT" && (
           <CardLabelError
             style={{
               width: "100%",

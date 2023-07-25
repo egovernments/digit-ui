@@ -261,7 +261,6 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
         <RadioOrSelect
           options={cities?.sort((a, b) => a.name.localeCompare(b.name))}
           selectedOption={cities?.length === 1 ? cities[0] : selectedCity}
-          disabled={selectedCity?.code ? true : false}
           optionKey="i18nKey"
           onSelect={selectCity}
           t={t}
