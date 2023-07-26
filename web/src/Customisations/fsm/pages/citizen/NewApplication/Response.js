@@ -200,6 +200,7 @@ const Response = ({ data, onSuccess }) => {
           },
         });
         sessionStorage.removeItem("Digit.total_amount");
+        sessionStorage.removeItem("Digit.fsm.file.address.city");
       } catch (err) {}
     }
   }, []);
