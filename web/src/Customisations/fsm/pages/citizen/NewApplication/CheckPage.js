@@ -17,6 +17,7 @@ import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Timeline from "../../../components/TLTimelineInFSM";
 
+const Digit = window.Digit;
 const ActionButton = ({ jumpTo }) => {
   const { t } = useTranslation();
   const history = useHistory();
@@ -52,6 +53,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const pitDetailValues = pitDetail
     ? Object.values(pitDetail).filter((value) => !!value)
     : null;
+  const totalAmount = Digit.SessionStorage.get("total_amount");
 
   const pitMeasurement = pitDetailValues?.reduce(
     (previous, current, index, array) => {
@@ -170,6 +172,12 @@ const CheckPage = ({ onSubmit, value }) => {
               actionButton={
                 <ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/select-payment-preference" />
               }
+            />
+          )}
+          {(totalAmount || totalAmount === 0) && (
+            <Row
+              label={t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT")}
+              text={"₹ " + t(totalAmount)}
             />
           )}
         </StatusTable>
