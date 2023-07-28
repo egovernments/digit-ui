@@ -6,11 +6,12 @@ import {
   RadioButtons,
   LabelFieldPair,
   RadioOrSelect,
+  TextInput,
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/TLTimelineInFSM";
 import { useLocation } from "react-router-dom";
 
-const Digit = window.Digit;
+// const Digit = window.Digit;
 
 const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   const allCities = Digit.Hooks.fsm.useTenants();
@@ -51,6 +52,8 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
       Digit.SessionStorage.get("fsm.file.address.city") ||
       Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")
   );
+  const [newLocality, setNewLocality] = useState();
+
   const { data: fetchedLocalities } = Digit.Hooks.useBoundaryLocalities(
     selectedCity?.code,
     "revenue",
@@ -168,6 +171,13 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
     }
   }
 
+  const onNewLocality = (value) => {
+    setNewLocality(value);
+    if (userType === "employee") {
+      onSelect(config.key, { ...formData[config.key], newLocality: value });
+    }
+  };
+
   function onSubmit() {
     onSelect(config.key, {
       city: selectedCity,
@@ -197,21 +207,43 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
           />
         </LabelFieldPair>
         {!isUrcEnable || isNewVendor || isEditVendor ? (
-          <LabelFieldPair>
-            <CardLabel className="card-label-smaller">
-              {`${t("CS_CREATECOMPLAINT_MOHALLA")} *`}
-              {/* {config.isMandatory ? " * " : null} */}
-            </CardLabel>
-            <Dropdown
-              className="form-field"
-              isMandatory
-              selected={selectedLocality}
-              option={localities?.sort((a, b) => a.name.localeCompare(b.name))}
-              select={selectLocality}
-              optionKey="i18nkey"
-              t={t}
-            />
-          </LabelFieldPair>
+          <div>
+            <LabelFieldPair>
+              <CardLabel className="card-label-smaller">
+                {`${t("CS_CREATECOMPLAINT_MOHALLA")} *`}
+                {/* {config.isMandatory ? " * " : null} */}
+              </CardLabel>
+              <Dropdown
+                className="form-field"
+                isMandatory
+                selected={selectedLocality}
+                option={localities?.sort((a, b) =>
+                  a.name.localeCompare(b.name)
+                )}
+                select={selectLocality}
+                optionKey="i18nkey"
+                t={t}
+              />
+            </LabelFieldPair>
+            {!isNewVendor &&
+              !isEditVendor &&
+              !isUrcEnable &&
+              formData?.address?.locality?.name === "Other" && (
+                <LabelFieldPair>
+                  <CardLabel className="card-label-smaller">{`${t(
+                    "ES_INBOX_PLEASE_SPECIFY_LOCALITY"
+                  )} *`}</CardLabel>
+                  <div className="field">
+                    <TextInput
+                      id="newLocality"
+                      key="newLocality"
+                      value={newLocality}
+                      onChange={(e) => onNewLocality(e.target.value)}
+                    />
+                  </div>
+                </LabelFieldPair>
+              )}
+          </div>
         ) : (
           <LabelFieldPair>
             <CardLabel>{`${t("CS_PROPERTY_LOCATION")} *`}</CardLabel>
