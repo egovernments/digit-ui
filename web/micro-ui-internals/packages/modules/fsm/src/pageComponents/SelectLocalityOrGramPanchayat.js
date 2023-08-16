@@ -63,7 +63,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
       let __localityList = fetchedLocalities;
       let filteredLocalityList = [];
 
-      if (formData?.address?.locality) {
+      if (formData?.address?.locality && formData?.address?.additionalDetails?.boundaryType === "Locality") {
         setSelectedLocality(formData.address.locality);
         setNewLocality(formData?.address?.additionalDetails?.newLocality);
       }
