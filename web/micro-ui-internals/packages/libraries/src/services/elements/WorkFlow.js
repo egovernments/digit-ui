@@ -297,7 +297,8 @@ export const WorkflowService = {
                 timeline.splice(disposalInProgressPosition + 1, 0, ...waitingForDisposedAction);
                 tripTimeline = disposedAction;
               } else {
-                tripTimeline = disposedAction.concat(waitingForDisposedAction);
+                tripTimeline =
+                  timeline?.filter((x) => x.status === "CANCELED").length !== 0 ? timeline : disposedAction.concat(waitingForDisposedAction);
               }
               const feedbackPosition = timeline.findIndex((data) => data.status === "CITIZEN_FEEDBACK_PENDING");
               if (feedbackPosition !== -1) {
