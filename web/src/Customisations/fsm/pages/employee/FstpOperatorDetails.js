@@ -133,10 +133,10 @@ const FstpOperatorDetails = () => {
     isNew ? inputs[0] : null
   );
   const [gramPanchayats, setGramPanchayats] = useState();
-  const [selectedGp, setSelectedGp] = useState(null);
+  const [selectedGp, setSelectedGp] = useState();
   const [villages, setVillages] = useState([]);
   const [selectedVillage, setSelectedVillage] = useState();
-  const [newGramPanchayat, setNewGramPanchayat] = useState();
+  const [newGramPanchayat, setNewGramPanchayat] = useState(null);
   const [newVillage, setNewVillage] = useState();
   const [selectedLocality, setSelectedLocality] = useState();
   const [localities, setLocalities] = useState();
@@ -330,12 +330,11 @@ const FstpOperatorDetails = () => {
       return;
     }
     if (
-      (selectLocation?.code !== "FROM_GRAM_PANCHAYAT" &&
-        (selectedLocality?.name === "Other" ||
-          selectLocation?.code === "FROM_OTHER_ULB") &&
-        newLocality === null) ||
-      newLocality?.trim()?.length === 0 ||
-      !locality.test(newLocality)
+      selectLocation?.code !== "FROM_GRAM_PANCHAYAT" &&
+      (selectedLocality === undefined || selectedLocality?.name === "Other") &&
+      (newLocality === null ||
+        newLocality?.trim()?.length === 0 ||
+        !locality.test(newLocality))
     ) {
       setShowToast({ key: "error", action: `ES_FSTP_INVALID_LOCALITY` });
       setTimeout(() => {
@@ -343,7 +342,11 @@ const FstpOperatorDetails = () => {
       }, 2000);
       return;
     }
-    if (selectLocation?.code === "FROM_GRAM_PANCHAYAT" && selectedGp === null) {
+    if (
+      selectLocation?.code === "FROM_GRAM_PANCHAYAT" &&
+      (selectedGp === undefined || selectedGp?.name === "Other") &&
+      (newGramPanchayat === null || newGramPanchayat?.trim()?.length === 0)
+    ) {
       setShowToast({ key: "error", action: `ES_FSTP_SELECT_GRAMPANCHAYAT` });
       setTimeout(() => {
         closeToast();

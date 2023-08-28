@@ -63,7 +63,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
       let __localityList = fetchedLocalities;
       let filteredLocalityList = [];
 
-      if (formData?.address?.locality) {
+      if (formData?.address?.locality && formData?.address?.additionalDetails?.boundaryType === "Locality") {
         setSelectedLocality(formData.address.locality);
         setNewLocality(formData?.address?.additionalDetails?.newLocality);
       }
@@ -264,7 +264,11 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
       <FormStep
         config={config}
         onSelect={onSubmit}
-        isDisabled={propertyLocation?.code === "WITHIN_ULB_LIMITS" ? !selectedLocality : Object.keys(selectedGp).length <= 0}
+        isDisabled={
+          propertyLocation?.code === "WITHIN_ULB_LIMITS"
+            ? selectedLocality && selectedLocality?.name === "Other" && !newLocality
+            : selectedGp && selectedGp?.name === "Other" && !newGp
+        }
         t={t}
       >
         {propertyLocation?.code === "WITHIN_ULB_LIMITS" ? (
