@@ -124,6 +124,7 @@ export const WorkflowService = {
   getDetailsById: async ({ tenantId, id, moduleCode, role, getTripData, serviceData }) => {
     var isPaymentCompleted = false;
     var isTripAmountAvailable = false;
+    var isAmountDue = false;
     const filters = { id };
     const response = await FSMService.search(tenantId, { ...filters });
     if (Number(response.fsm[0].additionalDetails.tripAmount) === 0) isTripAmountAvailable = true;
@@ -181,8 +182,14 @@ export const WorkflowService = {
       ];
 
       if (window.location.href.includes("application-details")) {
-        const demandDetails = await PaymentService.demandSearch(tenantId, id, "FSM.TRIP_CHARGES");
-        isPaymentCompleted = demandDetails?.Demands[0]?.isPaymentCompleted;
+        // const demandDetails = await PaymentService.demandSearch(tenantId, id, "FSM.TRIP_CHARGES");
+        // isPaymentCompleted = demandDetails?.Demands[0]?.isPaymentCompleted;
+        const filters = {
+          businessService: "FSM.TRIP_CHARGES",
+          consumerCode: id,
+        };
+        const fetchBill = await PaymentService.fetchBill(tenantId, filters);
+        isAmountDue = fetchBill?.Bill && fetchBill?.Bill.length > 0 && fetchBill?.Bill[0]?.billDetails[0]?.amount > 0;
       }
 
       const actionRolePair = nextActions?.map((action) => ({
@@ -317,26 +324,27 @@ export const WorkflowService = {
           ? action_newVehicle
           : location.pathname.includes("dso")
           ? actionRolePair.filter((i) => i.action !== "PAY")
-          : (tempCheckStatus.includes("WAITING_FOR_DISPOSAL") || tempCheckStatus.includes("PENDING_APPL_FEE_PAYMENT")) && !isPaymentCompleted
+          : (tempCheckStatus.includes("WAITING_FOR_DISPOSAL") || tempCheckStatus.includes("PENDING_APPL_FEE_PAYMENT")) && isAmountDue
           ? isTripAmountAvailable
             ? actionRolePair.filter((i) => i.action !== "PAY").filter((x) => x.action !== "CANCEL")
             : actionRolePair.filter((i) => i.action !== "COMPLETED")
           : tempCheckStatus.includes("DSO_INPROGRESS")
           ? actionRolePair.filter((i) => i.action !== "COMPLETED").filter((x) => x.action !== "PAY")
-          : tempCheckStatus.includes("DISPOSED") && isPaymentCompleted != undefined && !isPaymentCompleted
+          : tempCheckStatus.includes("DISPOSED") && isAmountDue != undefined && isAmountDue
           ? actionRolePair.filter((i) => i.action !== "COMPLETED").filter((x) => x.action !== "CANCEL")
-          : tempCheckStatus.includes("DISPOSED") && isPaymentCompleted != undefined && isPaymentCompleted
-          ? actionRolePair.filter((i) => i.action !== "PAY").filter((x) => x.action !== "CANCEL")
           : tempCheckStatus.includes("DISPOSED") && isTripAmountAvailable
           ? actionRolePair.filter((i) => i.action !== "PAY").filter((x) => x.action !== "CANCEL")
           : actionRolePair.filter((i) => i.action !== "PAY");
         const nextActions =
-          tempCheckStatus.includes("WAITING_FOR_DISPOSAL") && isPaymentCompleted
+          tempCheckStatus.includes("WAITING_FOR_DISPOSAL") && isAmountDue
             ? nextAction
                 .filter((x) => x.action !== "CANCEL")
                 .filter((i) => i.action !== "SENDBACK")
                 .filter((x) => x.action !== "REASSING")
-            : nextAction.filter((i) => i.action !== "SENDBACK").filter((x) => x.action !== "REASSING");
+            : nextAction
+                .filter((x) => x.action !== "CANCEL")
+                .filter((i) => i.action !== "SENDBACK")
+                .filter((x) => x.action !== "REASSING");
         if (role !== "CITIZEN" && moduleCode === "PGR") {
           const onlyPendingForAssignmentStatusArray = timeline?.filter((e) => e?.status === "PENDINGFORASSIGNMENT");
           const duplicateCheckpointOfPendingForAssignment = onlyPendingForAssignmentStatusArray.at(-1);
