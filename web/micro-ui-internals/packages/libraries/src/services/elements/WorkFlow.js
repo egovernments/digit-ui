@@ -335,16 +335,17 @@ export const WorkflowService = {
           : tempCheckStatus.includes("DISPOSED") && isTripAmountAvailable
           ? actionRolePair.filter((i) => i.action !== "PAY").filter((x) => x.action !== "CANCEL")
           : actionRolePair.filter((i) => i.action !== "PAY");
-        const nextActions =
-          tempCheckStatus.includes("WAITING_FOR_DISPOSAL") && isAmountDue
-            ? nextAction
-                .filter((x) => x.action !== "CANCEL")
-                .filter((i) => i.action !== "SENDBACK")
-                .filter((x) => x.action !== "REASSING")
-            : nextAction
-                .filter((x) => x.action !== "CANCEL")
-                .filter((i) => i.action !== "SENDBACK")
-                .filter((x) => x.action !== "REASSING");
+        const nextActions = isAmountDue
+          ? nextAction
+              .filter((x) => x.action !== "COMPLETED")
+              .filter((i) => i.action !== "SENDBACK")
+              .filter((x) => x.action !== "REASSING")
+          : tempCheckStatus.includes("WAITING_FOR_DISPOSAL") && !isAmountDue
+          ? nextAction
+              .filter((i) => i.action !== "SENDBACK")
+              .filter((x) => x.action !== "REASSING")
+              .filter((x) => x.action !== "CANCEL")
+          : nextAction.filter((i) => i.action !== "SENDBACK").filter((x) => x.action !== "REASSING");
         if (role !== "CITIZEN" && moduleCode === "PGR") {
           const onlyPendingForAssignmentStatusArray = timeline?.filter((e) => e?.status === "PENDINGFORASSIGNMENT");
           const duplicateCheckpointOfPendingForAssignment = onlyPendingForAssignmentStatusArray.at(-1);
