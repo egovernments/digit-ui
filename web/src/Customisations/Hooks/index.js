@@ -41,7 +41,7 @@ const logout = async () => {
   const userType = Digit.UserService.getType();
   try {
     await fetch(
-      `${window.location.origin}/user/v1/_logout?tenantId=${tenantId}`,
+      `${window.location.origin}/user/_logout?tenantId=${tenantId}`,
       requestOptions
     )
       .then((response) => response.json())
