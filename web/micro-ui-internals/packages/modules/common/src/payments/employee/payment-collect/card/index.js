@@ -26,43 +26,21 @@ export const useCardPaymentDetails = (props, t) => {
 
 const CardDetailsComponent = ({ ...props }) => {
   const { t } = useTranslation();
-  const [last4Digits, setLast4Digits] = useState(props?.value?.last4Digits);
   const [transactionNumber, setTransactionNumber] = useState(props?.value?.transactionNumber);
   const [reTransanctionNumber, setReTransanctionNumber] = useState(props?.value?.reTransanctionNumber);
   const isFSM = window?.location.pathname.includes("FSM");
 
   useEffect(() => {
     if (props.onChange) {
-      let errorMsg = "";
-      if (last4Digits.length !== 4) errorMsg = "ES_COMMON_ERROR_LAST_4_DIGITS";
       let errorObj = {};
-      if (!last4Digits) errorObj.last4Digits = "ES_COMMON_LAST_4_DIGITS";
       if (!transactionNumber) errorObj.transactionNumber = "ES_COMMON_TRANSANCTION_NO";
       if (!reTransanctionNumber) errorObj.reTransanctionNumber = "ES_COMMON_RE_TRANSANCTION_NO";
-      props.onChange({ transactionNumber, reTransanctionNumber, instrumentNumber: last4Digits, errorObj });
+      props.onChange({ transactionNumber, reTransanctionNumber, errorObj });
     }
-  }, [last4Digits, transactionNumber, reTransanctionNumber]);
+  }, [transactionNumber, reTransanctionNumber]);
 
   return (
     <React.Fragment>
-      <div className="label-field-pair">
-        <h2 className="card-label">{`${t("NOC_PAYMENT_CARD_LAST_DIGITS_LABEL")} *`}</h2>
-        <div className="field">
-          <div className="field-container">
-            <input
-              className="employee-card-input"
-              value={last4Digits}
-              type="text"
-              name="instrumentNumber"
-              maxLength="4"
-              minLength="4"
-              pattern={isFSM ? "^[0-9]+$" : null}
-              required
-              onChange={(e) => setLast4Digits(e.target.value)}
-            />
-          </div>
-        </div>
-      </div>
       <div className="label-field-pair">
         <h2 className="card-label">{`${t("NOC_PAYMENT_TRANS_NO_LABEL")} *`}</h2>
         <div className="field">
