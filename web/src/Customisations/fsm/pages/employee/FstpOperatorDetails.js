@@ -283,8 +283,21 @@ const FstpOperatorDetails = () => {
     const timeStamp =
       Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripTime)) /
       1000;
+
+    const currentDate = new Date();
+    const fiveMinutesAgo = new Date(currentDate.getTime() - 5 * 60000); // 5 minutes in milliseconds
+    const hours = fiveMinutesAgo.getHours();
+    const minutes = fiveMinutesAgo.getMinutes();
+    const tripStartTimestamp =
+      Date.parse(
+        new Date(
+          d.toString().split(":")[0].slice(0, -2) + `${hours}:${minutes}`
+        )
+      ) / 1000;
+
     const tripDetail = { tripNo: currentTrip };
     vehicle.tripEndTime = timeStamp;
+    vehicle.tripStartTime = tripStartTimestamp;
     vehicle.volumeCarried = wasteCollected;
     vehicle.tripDetails[0].additionalDetails = tripDetail;
     vehicle.additionalDetails = {
