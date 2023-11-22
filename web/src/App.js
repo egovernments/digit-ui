@@ -46,7 +46,7 @@ const enabledModules = [
   "Receipts",
   "OBPS",
   "NOC",
-  "Engagement",
+  // "Engagement",
   "CommonPT",
 ];
 window.Digit.ComponentRegistryService.setupRegistry({

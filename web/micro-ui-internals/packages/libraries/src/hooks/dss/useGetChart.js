@@ -19,7 +19,7 @@ const getRequest = (type, code, requestDate, filters, moduleLevel = "", addlFilt
     aggregationFactors: null,
     requestDate,
   };
-  if (moduleLevel === "FSM") {
+  if (moduleLevel === "FSM" || code === "fsmTopUlbByPerformance" || code === "fsmBottomUlbByPerformance") {
     aggregationRequestDto.source = "es";
   }
   return { aggregationRequestDto };
