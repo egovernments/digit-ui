@@ -16,13 +16,9 @@ const AddVehicle = ({ parentUrl, heading }) => {
   const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
 
-  const {
-    isLoading: isLoading,
-    isError: vendorCreateError,
-    data: updateResponse,
-    error: updateError,
-    mutate,
-  } = Digit.Hooks.fsm.useVehicleCreate(tenantId);
+  const { isLoading: isLoading, isError: vendorCreateError, data: updateResponse, error: updateError, mutate } = Digit.Hooks.fsm.useVehicleCreate(
+    tenantId
+  );
 
   useEffect(() => {
     setMutationHappened(false);
@@ -61,6 +57,7 @@ const AddVehicle = ({ parentUrl, heading }) => {
     const vehicleType = data?.vehicle?.type?.code;
     const vehicleModal = data?.vehicle?.modal?.code;
     const tankCapacity = data?.vehicle?.type?.capacity;
+    const VehicleOwner = data?.vehicle?.VehicleOwner?.code;
     const pollutionCert = new Date(`${data?.pollutionCert}`).getTime();
     const insurance = new Date(`${data?.insurance}`).getTime();
     const roadTax = new Date(`${data?.roadTax}`).getTime();
@@ -75,6 +72,7 @@ const AddVehicle = ({ parentUrl, heading }) => {
         model: vehicleModal,
         type: vehicleType,
         tankCapacity: tankCapacity,
+        vehicleOwner: VehicleOwner,
         suctionType: "SEWER_SUCTION_MACHINE",
         pollutionCertiValidTill: pollutionCert,
         InsuranceCertValidTill: insurance,

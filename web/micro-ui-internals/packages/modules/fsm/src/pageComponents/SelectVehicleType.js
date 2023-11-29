@@ -4,12 +4,13 @@ import { CardLabel, Dropdown, LabelFieldPair, TextInput } from "@egovernments/di
 const SelectVehicleType = ({ t, config, onSelect, userType, formData, setValue }) => {
   const stateId = Digit.ULBService.getStateId();
   const { data: vehicleData, isLoading } = Digit.Hooks.fsm.useMDMS(stateId, "Vehicle", "VehicleMakeModel");
+  const { data: vehicleOwnerData } = Digit.Hooks.fsm.useMDMS(stateId, "Vehicle", "VehicleOwner");
   let tenantId = Digit.ULBService.getCurrentTenantId();
-
   const [modals, setModals] = useState([]);
   const [selectedModal, setSelectedModal] = useState({});
   const [types, setTypes] = useState([]);
   const [selectedType, setSelectedType] = useState({});
+  const [ownerType, setOwnerType] = useState({});
   const [selectedCapacity, setSelectedCapacity] = useState("");
   useEffect(() => {
     if (vehicleData) {
@@ -55,6 +56,11 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData, setValue }
     onSelect(config.key, { ...formData[config.key], type: type });
   };
 
+  const selectOwnerType = (type) => {
+    setOwnerType(type);
+    onSelect(config.key, { ...formData[config.key], VehicleOwner: type });
+  };
+
   return (
     <div>
       <LabelFieldPair>
@@ -94,6 +100,21 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData, setValue }
           {config.isMandatory ? " * " : null}
         </CardLabel>
         <TextInput className="" textInputStyle={{ width: "50%" }} value={selectedCapacity} onChange={() => {}} disable={true} />
+      </LabelFieldPair>
+      <LabelFieldPair>
+        <CardLabel className="card-label-smaller">
+          {t("ES_FSM_REGISTRY_VEHICLE_OWNERSHIP")}
+          {config.isMandatory ? " * " : null}
+        </CardLabel>
+        <Dropdown
+          className="form-field"
+          isMandatory
+          selected={ownerType}
+          option={vehicleOwnerData?.sort((a, b) => a.name.localeCompare(b.name))}
+          select={selectOwnerType}
+          optionKey="name"
+          t={t}
+        />
       </LabelFieldPair>
     </div>
   );

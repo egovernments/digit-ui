@@ -43,6 +43,9 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
   const useVehicleType = () => {
     return useQuery("FSM_VEHICLE_TYPE", () => MdmsService.getVehicleType(tenantId, moduleCode, type), queryConfig);
   };
+  const useVehicleOwner = () => {
+    return useQuery("FSM_VEHICLE_OWNER", () => MdmsService.getVehicleOwner(tenantId, moduleCode, type), queryConfig);
+  };
 
   const useSlumLocality = () => {
     return useQuery(
@@ -119,6 +122,9 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
 
     case "VehicleMakeModel":
       return useVehicleType();
+
+    case "VehicleOwner":
+      return useVehicleOwner();
 
     case "Checklist":
       return useChecklist();

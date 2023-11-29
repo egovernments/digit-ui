@@ -364,6 +364,24 @@ const getVehicleTypeCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getVehicleOwnerCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "VehicleOwner",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const getChecklistCriteria = (tenantId, moduleCode) => ({
   details: {
     tenantId,
@@ -1048,6 +1066,13 @@ const GetVehicleMakeModel = (MdmsRes) =>
       i18nKey: `COMMON_MASTER_VEHICLE_${vehicleDetails.code}`,
     };
   });
+const GetVehicleOwnerCriteria = (MdmsRes) =>
+  MdmsRes["Vehicle"].VehicleOwner.filter((owner) => owner.active).map((ownerDetails) => {
+    return {
+      ...ownerDetails,
+      i18nKey: `COMMON_MASTER_VEHICLE_OWNER_${ownerDetails.code}`,
+    };
+  });
 
 const GetSlumLocalityMapping = (MdmsRes, tenantId) =>
   MdmsRes["FSM"].Slum.filter((type) => type.active).reduce((prev, curr) => {
@@ -1347,6 +1372,8 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return GetVehicleType(MdmsRes);
     case "VehicleMakeModel":
       return GetVehicleMakeModel(MdmsRes);
+    case "VehicleOwner":
+      return GetVehicleOwnerCriteria(MdmsRes);
     case "Slum":
       return GetSlumLocalityMapping(MdmsRes, tenantId);
     case "OwnerShipCategory":
@@ -1553,6 +1580,10 @@ export const MdmsService = {
   },
   getVehicleType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getVehicleTypeCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+
+  getVehicleOwner: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getVehicleOwnerCriteria(tenantId, moduleCode, type), moduleCode);
   },
   getChecklist: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getChecklistCriteria(tenantId, moduleCode), moduleCode);

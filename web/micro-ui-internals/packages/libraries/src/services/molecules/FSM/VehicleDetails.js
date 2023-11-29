@@ -9,6 +9,7 @@ const getResponse = (data, vendorDetails) => {
         { title: "ES_FSM_REGISTRY_VEHICLE_TYPE", value: `COMMON_MASTER_VEHICLE_${data?.type}` },
         { title: "ES_FSM_REGISTRY_VEHICLE_MODEL", value: data?.model },
         { title: "ES_FSM_REGISTRY_VEHICLE_CAPACITY", value: data?.tankCapacity },
+        { title: "ES_FSM_REGISTRY_VEHICLE_OWNERSHIP", value: data?.vehicleOwner },
         {
           title: "ES_FSM_REGISTRY_VEHICLE_POLLUTION_CERT",
           value: data?.pollutionCertiValidTill > 0 ? Digit.DateUtils.ConvertEpochToDate(data?.pollutionCertiValidTill) : "N/A",
