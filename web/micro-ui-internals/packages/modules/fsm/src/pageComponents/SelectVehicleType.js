@@ -19,8 +19,10 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData, setValue }
       setSelectedModal(...vehicleModal);
       setSelectedType(...vehicleType);
       setSelectedCapacity(formData?.vehicle?.tankCapacity);
+      const ownerShipType = vehicleOwnerData?.filter((owner) => owner?.code === formData?.vehicle?.vehicleOwner);
+      setOwnerType(...ownerShipType);
     }
-  }, [vehicleData]);
+  }, [vehicleData, vehicleOwnerData]);
 
   useEffect(() => {
     if (selectedModal?.code && selectedModal?.code !== formData?.vehicle?.modal) {

@@ -382,6 +382,24 @@ const getVehicleOwnerCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getVendorAgencyTypeCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "AgencyType",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const getChecklistCriteria = (tenantId, moduleCode) => ({
   details: {
     tenantId,
@@ -1059,6 +1077,13 @@ const GetVehicleType = (MdmsRes) =>
       };
     });
 
+const GetAgencyTYpe = (MdmsRes) =>
+  MdmsRes["Vendor"].AgencyType.filter((agency) => agency.active).map((agencyDetails) => {
+    return {
+      ...agencyDetails,
+      i18nKey: `COMMON_MASTER_VEHICLE_OWNER_${agencyDetails.code}`,
+    };
+  });
 const GetVehicleMakeModel = (MdmsRes) =>
   MdmsRes["Vehicle"].VehicleMakeModel.filter((vehicle) => vehicle.active).map((vehicleDetails) => {
     return {
@@ -1370,6 +1395,8 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return GetPitType(MdmsRes);
     case "VehicleType":
       return GetVehicleType(MdmsRes);
+    case "AgencyType":
+      return GetAgencyTYpe(MdmsRes);
     case "VehicleMakeModel":
       return GetVehicleMakeModel(MdmsRes);
     case "VehicleOwner":
@@ -1585,6 +1612,11 @@ export const MdmsService = {
   getVehicleOwner: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getVehicleOwnerCriteria(tenantId, moduleCode, type), moduleCode);
   },
+
+  getAgencyType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getVendorAgencyTypeCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+
   getChecklist: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getChecklistCriteria(tenantId, moduleCode), moduleCode);
   },

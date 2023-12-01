@@ -41,6 +41,9 @@ const EditVendor = ({ parentUrl, heading }) => {
       setDsoDetails(dsoDetails?.dsoDetails);
       let values = {
         vendorName: dsoDetails?.name,
+        vendor: {
+          agencyType: dsoDetails?.dsoDetails?.agencyType,
+        },
         street: dsoDetails?.dsoDetails?.address?.street,
         doorNo: dsoDetails?.dsoDetails?.address?.doorNo,
         plotNo: dsoDetails?.dsoDetails?.address?.plotNo,
@@ -76,7 +79,7 @@ const EditVendor = ({ parentUrl, heading }) => {
   const Config = VendorConfig(t, true);
 
   const onFormValueChange = (setValue, formData) => {
-    if (formData?.phone && formData?.address?.locality) {
+    if (formData?.phone && formData?.address?.locality && formData?.vendor?.agencyType) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);

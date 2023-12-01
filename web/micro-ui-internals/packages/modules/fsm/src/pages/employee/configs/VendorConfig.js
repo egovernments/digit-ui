@@ -23,6 +23,14 @@ const VendorConfig = (t, disabled = false) => {
             className: "payment-form-text-input-correction",
           },
         },
+        {
+          route: "vendor",
+          component: "SelectAgencyType",
+          withoutLabel: true,
+          key: "vendor",
+          isMandatory: true,
+          type: "component",
+        },
       ],
     },
     {

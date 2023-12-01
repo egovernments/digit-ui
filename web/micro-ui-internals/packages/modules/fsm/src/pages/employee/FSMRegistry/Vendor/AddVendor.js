@@ -41,7 +41,7 @@ const AddVendor = ({ parentUrl, heading }) => {
   };
 
   const onFormValueChange = (setValue, formData) => {
-    if (formData?.vendorName && formData?.phone && formData?.address?.locality && formData?.selectGender) {
+    if (formData?.vendorName && formData?.phone && formData?.address?.locality && formData?.selectGender && formData?.vendor?.agencyType) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);
@@ -72,11 +72,12 @@ const AddVendor = ({ parentUrl, heading }) => {
     const phone = data?.phone;
     const dob = new Date(`${data.dob}`).getTime() || new Date(`1/1/1970`).getTime();
     const additionalDetails = data?.additionalDetails;
+    const agencyType = data?.vendor?.agencyType?.code;
     const formData = {
       vendor: {
         tenantId: tenantId,
         name,
-        agencyType: "ULB",
+        agencyType: agencyType,
         paymentPreference: "post-service",
         address: {
           tenantId: tenantId,
