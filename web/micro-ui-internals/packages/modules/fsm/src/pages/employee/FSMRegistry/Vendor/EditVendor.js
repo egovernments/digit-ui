@@ -109,10 +109,12 @@ const EditVendor = ({ parentUrl, heading }) => {
     const gender = data?.selectGender?.code;
     const emailId = data?.emailId;
     const dob = new Date(`${data.dob}`).getTime() || new Date(`1/1/1970`).getTime();
+    const agencyType = data?.vendor?.agencyType?.code;
     const formData = {
       vendor: {
         ...dsoDetails,
         name,
+        agencyType: agencyType,
         address: {
           ...dsoDetails.address,
           landmark,
