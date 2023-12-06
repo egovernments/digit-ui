@@ -47,7 +47,7 @@ const AddVehicle = ({ parentUrl, heading }) => {
       formData?.phone &&
       formData?.vehicle?.modal &&
       formData?.vehicle?.type &&
-      formData?.vehicle?.vehicleOwner
+      formData?.vehicle?.VehicleOwner
     ) {
       setSubmitValve(true);
     } else {
