@@ -202,10 +202,10 @@ export const CollectPayment = (props) => {
     }
   };
 
-  useEffect(() => {
-    document?.getElementById("paymentInfo")?.scrollIntoView({ behavior: "smooth" });
-    document?.querySelector("#paymentInfo + .label-field-pair input")?.focus();
-  }, [selectedPaymentMode]);
+  // useEffect(() => {
+  //   document?.getElementById("paymentInfo")?.scrollIntoView({ behavior: "smooth" });
+  //   document?.querySelector("#paymentInfo + .label-field-pair input")?.focus();
+  // }, [selectedPaymentMode]);
 
   let config = [
     {
