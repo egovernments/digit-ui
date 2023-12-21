@@ -96,11 +96,12 @@ const ApplicationDetails = (props) => {
     setSelectedAction(action);
     setDisplayMenu(false);
   }
-
+  
   useEffect(() => {
     switch (selectedAction) {
       case "SCHEDULE":
       case "DSO_ACCEPT":
+        return history.push("/digit-ui/employee/fsm/garima-details/" + applicationNumber);
       case "ACCEPT":
       case "ASSIGN":
       case "GENERATE_DEMAND":
@@ -223,7 +224,7 @@ const ApplicationDetails = (props) => {
   if (isLoading) {
     return <Loader />;
   }
-
+  console.log(applicationDetails,"applicationDetails")
   return (
     <React.Fragment>
       {!isLoading ? (

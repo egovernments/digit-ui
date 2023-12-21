@@ -6,6 +6,12 @@ import FSMCard from "./components/FsmCard";
 import CheckSlum from "./pageComponents/CheckSlum";
 import SelectAddress from "./pageComponents/SelectAddress";
 import SelectChannel from "./pageComponents/SelectChannel";
+import SelectVehicleNumber from "./pageComponents/SelectVehicleNumber";
+import SelectvehicleCapacity from "./pageComponents/SelectvehicleCapacity";
+import SelectGraimaHelper from "./pageComponents/SelectGraimaHelper";
+import AddSaniationWorker from "./pageComponents/AddSaniationWorker";
+import SelectGarimaTripNo from "./pageComponents/SelectGarimaTripNo"; 
+import SelectGraimaDriver from "./pageComponents/SelectGraimaDriver";
 import SelectGender from "./pageComponents/SelectGender";
 import SelectPaymentType from "./pageComponents/SelectPaymentType";
 import SelectGeolocation from "./pageComponents/SelectGeolocation";
@@ -32,6 +38,7 @@ import SelectRating from "./pages/citizen/Rating/SelectRating";
 import EmployeeApp from "./pages/employee";
 import ApplicationAudit from "./pages/employee/ApplicationAudit";
 import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails";
+import EmployeeGarimaDetails from "./pages/employee/GarimaDetails";
 import DsoDashboard from "./pages/employee/DsoDashboard";
 import EditApplication from "./pages/employee/EditApplication";
 import FstpInbox from "./pages/employee/FstpInbox";
@@ -170,6 +177,12 @@ const componentsToRegister = {
   FSMModule,
   FSMLinks,
   SelectChannel,
+  SelectVehicleNumber,
+  SelectvehicleCapacity,
+  SelectGraimaDriver,
+  SelectGraimaHelper,
+  AddSaniationWorker,
+  SelectGarimaTripNo,
   SelectName,
   SelectTripData,
   SelectGender,
@@ -180,6 +193,7 @@ const componentsToRegister = {
   FSMNewApplicationEmp: NewApplication,
   FSMEditApplication: EditApplication,
   FSMEmployeeApplicationDetails: EmployeeApplicationDetails,
+  EmployeeGarimaDetails,
   FSMFstpOperatorDetails: FstpOperatorDetails,
   FSMResponse: Response,
   FSMApplicationAudit: ApplicationAudit,

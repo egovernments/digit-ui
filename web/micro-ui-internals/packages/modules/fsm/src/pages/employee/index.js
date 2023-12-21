@@ -20,7 +20,8 @@ export const FsmBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
   const FSTPO = Digit.UserService.hasAccess(["FSM_EMP_FSTPO"]);
-  const isApplicationDetails = location?.pathname?.includes("application-details");
+  const isApplicationDetails = location?.pathname?.includes("application-details/FSM");
+  const isGarimaDetails = location?.pathname?.includes("garima-details");
   const isVehicleLog = location?.pathname?.includes("fstp-operator-details");
   const isInbox = location?.pathname?.includes("inbox");
   const isFsm = location?.pathname?.includes("fsm");
@@ -76,16 +77,20 @@ export const FsmBreadCrumb = ({ location }) => {
       show: location.pathname.includes("/employee/fsm/response") ? true : false,
     },
     {
-      path: isInbox || isSearch || isApplicationDetails ? "/digit-ui/employee/fsm/inbox" : "",
+      path: isInbox || isSearch || isApplicationDetails || isGarimaDetails ? "/digit-ui/employee/fsm/inbox" : "",
       content: t("ES_TITLE_INBOX"),
-      show: (isFsm && isInbox) || isSearch || isApplicationDetails,
+      show: (isFsm && isInbox) || isSearch || isApplicationDetails || isGarimaDetails ,
     },
     {
       path: "/digit-ui/employee/fsm/search",
       content: t("ES_TITILE_SEARCH_APPLICATION"),
       show: search,
     },
-    { content: t("ES_TITLE_APPLICATION_DETAILS"), show: isApplicationDetails },
+    { path: isApplicationDetails || isGarimaDetails ? "/digit-ui/employee/fsm/application-details/" + id : "",
+      content: t("ES_TITLE_APPLICATION_DETAILS"), 
+      show: isApplicationDetails || isGarimaDetails, 
+    },
+    { content: "Assign Vehicle and Worker", show: isGarimaDetails },
     { content: t("ES_TITLE_VEHICLE_LOG"), show: isVehicleLog },
     {
       path: "/digit-ui/employee/fsm/registry/vendor-details/" + id,
@@ -184,6 +189,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const NewApplication = Digit.ComponentRegistryService.getComponent("FSMNewApplicationEmp");
   const EditApplication = Digit.ComponentRegistryService.getComponent("FSMEditApplication");
   const EmployeeApplicationDetails = Digit.ComponentRegistryService.getComponent("FSMEmployeeApplicationDetails");
+  const EmployeeGarimaDetails = Digit.ComponentRegistryService.getComponent("EmployeeGarimaDetails");
   const FstpOperatorDetails = Digit.ComponentRegistryService.getComponent("FSMFstpOperatorDetails");
   const Response = Digit.ComponentRegistryService.getComponent("FSMResponse");
   const ApplicationAudit = Digit.ComponentRegistryService.getComponent("FSMApplicationAudit");
@@ -232,6 +238,10 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute
             path={`${path}/application-details/:id`}
             component={() => <EmployeeApplicationDetails parentRoute={path} userType="EMPLOYEE" />}
+          />
+          <PrivateRoute
+            path={`${path}/garima-details/:id`}
+            component={() => <EmployeeGarimaDetails parentRoute={path} userType="EMPLOYEE" />}
           />
           <PrivateRoute path={`${path}/fstp-operator-details/:id`} component={FstpOperatorDetails} />
           <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
