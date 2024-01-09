@@ -210,17 +210,23 @@ const AdvanceCollection = ({
                 </CardLabel>
                 <div className="field">
                   <TextInput
-                    disabled={url.includes("modify") ? true : false}
+                    disabled={
+                      url.includes("modify")
+                        ? formData?.address?.propertyLocation?.code ===
+                            "FROM_GRAM_PANCHAYAT" &&
+                          applicationData?.advanceAmount > 0
+                          ? false
+                          : true
+                        : false
+                    }
                     type={input.type}
                     key={input.name}
                     style={FSMTextFieldStyle}
                     onChange={(e) => setAdvanceAmount(e.target.value)}
                     value={
-                      input.default
-                        ? input.default
-                        : formData && formData[config.key]
+                      formData && formData[config.key]
                         ? formData[config.key][input.name]
-                        : 0
+                        : applicationData?.advanceAmount
                     }
                     {...input.validation}
                   />
@@ -249,9 +255,9 @@ const AdvanceCollection = ({
                         {t("FSM_ADVANCE_AMOUNT_MIN")}
                       </CardLabelError>
                     )}
-                  {/* {url.includes("modify-application") &&
-                    Number(AdvanceAmount) === 0 &&
+                  {url.includes("modify-application") &&
                     applicationData?.advanceAmount > 0 &&
+                    Number(formData?.tripData?.amountPerTrip) > 0 &&
                     Number(currentValue) === 0 && (
                       <CardLabelError
                         style={{
@@ -261,9 +267,9 @@ const AdvanceCollection = ({
                           marginBottom: "0px",
                         }}
                       >
-                        {t("FSM_ADVANCE_AMOUNT_NOT_ZERO")}
+                        {t("FSM_ADVANCE_AMOUNT_LESS_THAN_AMOUNT_PER_TRIP")}
                       </CardLabelError>
-                    )} */}
+                    )}
                 </div>
               </LabelFieldPair>
             </React.Fragment>
