@@ -86,6 +86,7 @@ import useDriverUpdate from "./fsm/useDriverUpdate";
 import useDriverDetails from "./fsm/useDriverDetails";
 import useVendorSearch from "./fsm/useVendorSearch";
 import useAdvanceBalanceCalulation from "./fsm/useAdvanceBalanceCalculation";
+import useSanitationWorker from "./fsm/useSanitationWorker";
 
 import useEmployeeSearch from "./useEmployeeSearch";
 
@@ -303,6 +304,7 @@ const fsm = {
   useVehicleTripCreate,
   useVendorSearch,
   useAdvanceBalanceCalulation,
+  useSanitationWorker: useSanitationWorker,
 };
 
 const pt = {

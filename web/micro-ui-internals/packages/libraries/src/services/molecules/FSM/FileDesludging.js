@@ -75,4 +75,8 @@ export const FileDesludging = {
     const response = await FSMService.create(data, tenantId);
     return response;
   },
+  createSanitationWorker: async (tenantId, data) => {
+    const response = await FSMService.createSanitationWorker(data, tenantId);
+    return response;
+  },
 };

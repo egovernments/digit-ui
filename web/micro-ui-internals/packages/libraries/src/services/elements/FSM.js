@@ -174,4 +174,14 @@ export const FSMService = {
       params: { tenantId, ...details },
       auth: true,
     }),
+  createSanitationWorker: (details, tenantId) =>
+    Request({
+      url: Urls.fsm.createGarimaWorker,
+      data: details,
+      useCache: true,
+      userService: true,
+      method: "POST",
+      params: { tenantId },
+      auth: true,
+    }),
 };
