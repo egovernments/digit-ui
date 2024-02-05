@@ -17,8 +17,6 @@ const SelectVehicleNumber = ({ t, config, onSelect, formData = {}, userType }) =
   //   onSelect(config.key, value);
   // }
 
-  console.log(config,"config 1111")
-
   return (
     <TextInput
       id="vehicleCapacity"

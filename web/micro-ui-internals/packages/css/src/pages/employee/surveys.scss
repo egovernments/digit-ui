@@ -14,6 +14,10 @@
   }
 }
 
+.garimaHelper_wrapper{
+  background-color: rgba(250, 250, 250, var(--bg-opacity));
+}
+
 .newSurveyForm_wrapper {
   @apply grid p-md bg-grey-light border border-border rounded gap-6 ;
   .newSurveyForm_questions {

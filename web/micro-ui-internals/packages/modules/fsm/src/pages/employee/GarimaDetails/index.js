@@ -26,6 +26,14 @@ const GarimaDetails = (props) => {
         { staleTime: Infinity }
     );
 
+    const {
+        isLoading: isDriverLoading,
+        isError: isDriverError,
+        data: driverData,
+        error: driverError,
+        mutate,
+    } = Digit.Hooks.fsm.useGarimaSearchActions(tenantId);
+
     const onSubmit = (data) => {
         console.log("DATA SUBMITTED")
     };
@@ -37,6 +45,22 @@ const GarimaDetails = (props) => {
 
     const onFormValueChange = (setValue, formData) => {
         // console.log(formData,"VALUE CHANGED")
+    };
+
+    
+    
+    const searchGarimaWorkerDetails = (data) => {
+        console.log(data,"qwertyuio")
+        
+        mutate(data, {
+          onError: (error, variables) => {
+            setShowToast({ key: "error", action: error });
+            setTimeout(closeToast, 5000);
+          },
+          onSuccess: (data, variables) => {
+            console.log("Success")
+          },
+        });
     };
 
     const configs = [
@@ -56,7 +80,8 @@ const GarimaDetails = (props) => {
                     "type": "component",
                     "key": "vehicleCapacity",
                     "component": "SelectvehicleCapacity",
-                    "garimaApplicationData": garimaApplicationData
+                    "garimaApplicationData": garimaApplicationData,
+                    
                 },
                 {
                     "label": "ES_APPLICATION_DETAILS_PAYMENT_NO_OF_TRIPS",
@@ -76,14 +101,16 @@ const GarimaDetails = (props) => {
                     "type": "component",
                     "key": "garimaDriverDetails",
                     "component": "SelectGraimaDriver",
-                    "withoutLabel": true
+                    "withoutLabel": true,
+                    "searchGarimaWorkerDetails": searchGarimaWorkerDetails,
                 },
                 {
                     "isMandatory": true,
                     "type": "component",
                     "key": "garimaHelperDetails",
                     "component": "SelectGraimaHelper",
-                    "withoutLabel": true
+                    "withoutLabel": true,
+                    "searchGarimaWorkerDetails": searchGarimaWorkerDetails,
                 },
                 {
                     "label": "Can't find the saniation worker?",
@@ -97,7 +124,6 @@ const GarimaDetails = (props) => {
         }
     ];
     
-
     return (
         <React.Fragment>
             <Header style={{ marginBottom: "16px" }}>{"Assign Vehicle and Sanitation Worker"}</Header>

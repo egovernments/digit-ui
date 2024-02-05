@@ -67,7 +67,9 @@ import usePropertySearchNew from "./pt/usePropertySearchNew";
 import usePropertySearchWithDue from "./pt/usePropertySearchWithDue";
 import usePropertyPayment from "./pt/usePropertyPayment";
 import useApplicationDetail from "./fsm/useApplicationDetail";
+import useGarimaDetail from "./fsm/useGarimaDetail";
 import useApplicationActions from "./fsm/useApplicationActions";
+import useGarimaSearchActions from "./fsm/useGarimaSearchActions";
 import useApplicationAudit from "./fsm/useApplicationAudit";
 import useSearchForAuditData from "./fsm/useSearchForAudit";
 import useVehiclesSearch from "./fsm/useVehiclesSearch";
@@ -279,6 +281,7 @@ const fsm = {
   useDsoSearch,
   useApplicationDetail,
   useApplicationActions,
+  useGarimaSearchActions,
   useApplicationAudit,
   useSearchForAuditData,
   useVehicleSearch,
@@ -305,6 +308,7 @@ const fsm = {
   useVendorSearch,
   useAdvanceBalanceCalulation,
   useSanitationWorker: useSanitationWorker,
+  useGarimaDetail,
 };
 
 const pt = {

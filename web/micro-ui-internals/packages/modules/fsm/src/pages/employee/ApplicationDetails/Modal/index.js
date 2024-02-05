@@ -62,7 +62,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   );
   const client = useQueryClient();
   const stateCode = Digit.ULBService.getStateId();
-
+  
   const { data: vehicleList, isLoading: isVehicleData, isSuccess: isVehicleDataLoaded } = Digit.Hooks.fsm.useMDMS(
     stateCode,
     "Vehicle",
@@ -295,6 +295,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
 
     submitAction({ fsm: applicationData, workflow });
   }
+
   useEffect(() => {
     switch (action) {
       case "SCHEDULE":
@@ -312,6 +313,11 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "ACCEPT":
         //TODO: add accept UI
         setFormValve(vehicleNo ? true : false);
+        console.log(
+          
+            vehicleNoList,"7",
+            
+          )
         return setConfig(
           configAcceptDso({
             t,

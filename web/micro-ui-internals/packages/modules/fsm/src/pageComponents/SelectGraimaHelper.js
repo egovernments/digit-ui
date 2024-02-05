@@ -26,6 +26,9 @@ const SelectGraimaHelper = ({ t, config, onSelect, formData = {}, errors }) => {
 		let garimaHelperDetails = formData.garimaHelperDetails;
 		garimaHelperDetails.helperList[index][input] = value
 		onSelect(config.key, { ...formData[config.key], garimaHelperDetails: garimaHelperDetails });
+		if (input === "helperName" && value?.length === 9){
+			config.searchGarimaWorkerDetails(value)
+		}
 	}
 
 	if (!formData?.garimaHelperDetails) {
@@ -66,6 +69,10 @@ const SelectGraimaHelper = ({ t, config, onSelect, formData = {}, errors }) => {
 			isMandatory: true,
 		},
 	]
+
+	console.log(formData,"formData 11111111111111");
+	console.log(config,"config 1111111111");
+
 	return (
 		<div>
 			<React.Fragment>

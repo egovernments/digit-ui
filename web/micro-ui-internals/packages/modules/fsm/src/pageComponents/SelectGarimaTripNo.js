@@ -5,7 +5,6 @@ import { useLocation } from "react-router-dom";
 
 const SelectGarimaTripNo = ({ t, config, onSelect, formData = {}, userType }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  console.log(formData?.tripNumber,"formData 1111")
 
   return (
     <TextInput

@@ -264,6 +264,115 @@ export const Search = {
     };
   },
 
+  garimaDetails: async (t, tenantId, applicationNos, userType) => {
+    const filter = { applicationNos };
+    let dsoDetails = {};
+    let vehicle = {};
+    const response = await Search.application(tenantId, filter);
+    const additionalDetails = response?.address?.additionalDetails;
+    let receivedPayment = response?.additionalDetails?.receivedPayment;
+    if (response?.dsoId) {
+      const dsoFilters = { ids: response.dsoId, vehicleIds: response?.vehicleId };
+      [dsoDetails] = await DsoDetails(tenantId, dsoFilters);
+
+      if (response?.vehicleId) {
+        vehicle = dsoDetails.vehicles.find((vehicle) => vehicle.id === response.vehicleId);
+      }
+    }
+
+    let paymentPreference = response?.paymentPreference;
+
+    let slumLabel = "";
+    if (response?.address?.slumName && response?.address?.locality?.code && response?.tenantId) {
+      const slumData = await MdmsService.getSlumLocalityMapping(response?.tenantId, "FSM", "Slum");
+      if (slumData[response?.address?.locality?.code]) {
+        slumLabel = slumData[response?.address?.locality?.code].find((slum) => slum?.code === response?.address?.slumName);
+      } else {
+        const slumDataArray = Object.values(slumData);
+        for (let i = 0; i < slumDataArray.length; i++) {
+          const slumFound = slumDataArray[i].find((slum) => slum.code === response?.address?.slumName);
+          if (slumFound) {
+            slumLabel = slumFound;
+          }
+        }
+      }
+    }
+    const slumName = slumLabel ? slumLabel.i18nKey : "N/A";
+
+    const state = Digit.ULBService.getStateId();
+    const vehicleMenu = await MdmsService.getVehicleType(state, "Vehicle", "VehicleType");
+    const _vehicle = vehicleMenu?.find((vehicle) => response?.vehicleType === vehicle?.code);
+
+    const vehicleMake = _vehicle?.i18nKey;
+    const vehicleCapacity = _vehicle?.capacity;
+    var amountPerTrip = "";
+    var totalAmount = "";
+    const demandDetails = await PaymentService.demandSearch(tenantId, applicationNos, "FSM.TRIP_CHARGES");
+    if (additionalDetails?.boundaryType === "Village" || additionalDetails?.boundaryType === "GP") {
+      amountPerTrip = response?.additionalDetails && response?.additionalDetails?.tripAmount ? response?.additionalDetails?.tripAmount : "N/A";
+      totalAmount = response?.additionalDetails?.tripAmount ? response?.additionalDetails?.tripAmount * response?.noOfTrips : "N/A";
+    } else {
+      amountPerTrip =
+        response?.additionalDetails && response?.additionalDetails?.tripAmount
+          ? response?.additionalDetails?.tripAmount
+          : demandDetails?.Demands[0]?.demandDetails[0]?.taxAmount || "N/A";
+      // const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
+      totalAmount = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.taxAmount)?.reduce((a, b) => a + b) || "N/A";
+    }
+    var balancePaid = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.collectionAmount)?.reduce((a, b) => a + b) || "N/A";
+    balancePaid = balancePaid - response?.advanceAmount;
+    const isFullPaymentDone =
+      demandDetails?.Demands[0]?.demandDetails[0]?.taxAmount === demandDetails?.Demands[0]?.demandDetails[0]?.collectionAmount;
+    const isPaymentDone =
+      demandDetails?.Demands[0]?.demandDetails.length > 1
+        ? demandDetails?.Demands[0]?.demandDetails[demandDetails?.Demands[0]?.demandDetails.length - 1]?.collectionAmount > 0
+        : demandDetails?.Demands[0]?.demandDetails[0]?.collectionAmount > 0;
+
+    const employeeResponse = [
+      {
+        title: "ES_TITLE_APPLICATION_DETAILS",
+        values: [
+          { title: "CS_FILE_DESLUDGING_APPLICATION_NO", value: response?.applicationNo },
+          { title: "ES_APPLICATION_CHANNEL", value: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${response?.source}` },
+        ],
+      },
+    ];
+
+    if (userType !== "CITIZEN" && userType !== "DSO") {
+      employeeResponse.map((data) => {
+        if (data.title === "ES_TITLE_APPLICANT_DETAILS" || data.title === "Applicant Details") {
+          data.values.push({ title: "COMMON_APPLICANT_GENDER", value: response?.citizen?.gender });
+        }
+      });
+    }
+
+    if (userType !== "CITIZEN")
+      return {
+        tenantId: response.tenantId,
+        applicationDetails: employeeResponse,
+        additionalDetails: response?.additionalDetails,
+        totalAmount: totalAmount,
+        isFullPaymentDone: isFullPaymentDone,
+      };
+
+    const citizenResp = employeeResponse.reduce((arr, curr) => {
+      return arr.concat(curr.values.filter((i) => i !== null));
+    }, []);
+
+    const citizenResponse = citizenResp.map((detail) => {
+      // detail.title = detail.title?.replace("ES_", "CS_");
+      if (!detail.map) return detail;
+      delete detail.value;
+      return detail;
+    });
+
+    return {
+      tenantId: response.tenantId,
+      applicationDetails: citizenResponse,
+      pdfData: { ...response, amountPerTrip, totalAmount, vehicleMake, vehicleCapacity, slumName, dsoDetails },
+    };
+  },
+
   allVehicles: (tenantId, filters) => {
     return FSMService.vehicleSearch(tenantId, filters);
   },

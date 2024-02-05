@@ -4,14 +4,12 @@ import { useLocation } from "react-router-dom";
 
 const SelectGraimaDriver = ({ t, config, onSelect, formData = {}, errors }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-
-  const { pathname: url } = useLocation();
   
   let inputs = [
     {
       label: "Assign Driver",
       type: "text",
-      name: "applicantName",
+      name: "garimaDriverName",
       validation: {
         isRequired: true,
         pattern: "^[a-zA-Z]+( [a-zA-Z]+)*$",
@@ -22,7 +20,7 @@ const SelectGraimaDriver = ({ t, config, onSelect, formData = {}, errors }) => {
     {
       label: "Add Driver's Mobile Number",
       type: "text",
-      name: "mobileNumber",
+      name: "garimaDriverMobileNumber",
       validation: {
         isRequired: true,
         pattern: "[6-9]{1}[0-9]{9}",
@@ -33,6 +31,16 @@ const SelectGraimaDriver = ({ t, config, onSelect, formData = {}, errors }) => {
       isMandatory: true,
     },
   ]
+
+  const setValue = (value, input) =>{
+    let garimaDriverDetails = formData.garimaDriverDetails || {};
+    garimaDriverDetails[input] = value;
+    onSelect(config.key, { ...formData[config.key], garimaDriverDetails: garimaDriverDetails });
+    if (input === "garimaDriverName" && value?.length === 9){
+      config.searchGarimaWorkerDetails(value)
+    }
+      
+  }
 
   return (
     <div>
@@ -51,7 +59,7 @@ const SelectGraimaDriver = ({ t, config, onSelect, formData = {}, errors }) => {
                   <TextInput
                     key={input.name}
                     value={formData && formData[config.key] ? formData[config.key][input.name] : null}
-                    onChange={""}
+                    onChange={(e)=>setValue(e.target.value, input.name)}
                     disable={false}
                     {...input.validation}
                   />

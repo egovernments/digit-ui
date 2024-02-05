@@ -224,7 +224,7 @@ const ApplicationDetails = (props) => {
   if (isLoading) {
     return <Loader />;
   }
-  console.log(applicationDetails,"applicationDetails")
+
   return (
     <React.Fragment>
       {!isLoading ? (

@@ -186,8 +186,7 @@ const EmployeeApp = ({ path, url, userType }) => {
 
   const Inbox = Digit.ComponentRegistryService.getComponent("FSMEmpInbox");
   const FstpInbox = Digit.ComponentRegistryService.getComponent("FSMFstpInbox");
-  const NewApplication = Digit.ComponentRegistryService.getComponent("FSMNewApplicationEmp");
-  const EditApplication = Digit.ComponentRegistryService.getComponent("FSMEditApplication");
+  const NewApplication = Digit.ComponentRegistryService.getComponent("FSMEditApplication");
   const EmployeeApplicationDetails = Digit.ComponentRegistryService.getComponent("FSMEmployeeApplicationDetails");
   const EmployeeGarimaDetails = Digit.ComponentRegistryService.getComponent("EmployeeGarimaDetails");
   const FstpOperatorDetails = Digit.ComponentRegistryService.getComponent("FSMFstpOperatorDetails");
@@ -197,7 +196,8 @@ const EmployeeApp = ({ path, url, userType }) => {
   const FSMLinks = Digit.ComponentRegistryService.getComponent("FSMLinks");
   const FSTPO = Digit.UserService.hasAccess(["FSM_EMP_FSTPO"]);
   const FSMRegistry = Digit.ComponentRegistryService.getComponent("FSMRegistry");
-  const VendorDetails = Digit.ComponentRegistryService.getComponent("VendorDetails");
+  const VendorDetails = Digit.ComponentRegistryService.getComponent("VendorDetails");= Digit.ComponentRegistryService.getComponent("FSMNewApplicationEmp");
+  const EditApplication 
   const AddVendor = Digit.ComponentRegistryService.getComponent("AddVendor");
   const EditVendor = Digit.ComponentRegistryService.getComponent("EditVendor");
   const VehicleDetails = Digit.ComponentRegistryService.getComponent("VehicleDetails");
