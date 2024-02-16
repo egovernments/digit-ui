@@ -56,9 +56,10 @@ import PlusMinusInput from "./pageComponents/PlusMinusInput";
 import ConfirmationBox from "./components/Confirmation";
 import SelectLocalityOrGramPanchayat from "./pageComponents/SelectLocalityOrGramPanchayat";
 import SelectAgencyType from "./pageComponents/SelectAgencyType";
+import TqmCard from "./components/TqmCard";
 
 const FSMModule = ({ stateCode, userType, tenants }) => {
-  const moduleCode = "FSM";
+  const moduleCode = ["FSM", "TQM"];
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
@@ -207,6 +208,7 @@ const componentsToRegister = {
   ConfirmationBox,
   SelectLocalityOrGramPanchayat,
   SelectAgencyType,
+  TqmCard,
 };
 
 export const initFSMComponents = () => {

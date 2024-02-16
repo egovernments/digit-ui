@@ -20,8 +20,9 @@ const PrivacyMaskIcon = ({ className, style = {} }) => (
   // </svg>
   <svg width="22" height="15" viewBox="0 0 22 15" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
     <path
-     d="M11 0C6 0 1.73 3.11 0 7.5C1.73 11.89 6 15 11 15C16 15 20.27 11.89 22 7.5C20.27 3.11 16 0 11 0ZM11 12.5C8.24 12.5 6 10.26 6 7.5C6 4.74 8.24 2.5 11 2.5C13.76 2.5 16 4.74 16 7.5C16 10.26 13.76 12.5 11 12.5ZM11 4.5C9.34 4.5 8 5.84 8 7.5C8 9.16 9.34 10.5 11 10.5C12.66 10.5 14 9.16 14 7.5C14 5.84 12.66 4.5 11 4.5Z"
-     fill="#B1B4B6"/>
+      d="M11 0C6 0 1.73 3.11 0 7.5C1.73 11.89 6 15 11 15C16 15 20.27 11.89 22 7.5C20.27 3.11 16 0 11 0ZM11 12.5C8.24 12.5 6 10.26 6 7.5C6 4.74 8.24 2.5 11 2.5C13.76 2.5 16 4.74 16 7.5C16 10.26 13.76 12.5 11 12.5ZM11 4.5C9.34 4.5 8 5.84 8 7.5C8 9.16 9.34 10.5 11 10.5C12.66 10.5 14 9.16 14 7.5C14 5.84 12.66 4.5 11 4.5Z"
+      fill="#B1B4B6"
+    />
   </svg>
 );
 
@@ -372,9 +373,12 @@ export const LanguageIcon = ({ className, styles }) => (
 );
 
 export const LogoutIcon = ({ className, styles }) => (
-  <svg className={className}  viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ ...styles }}>
-<path d="M15 4L13.59 5.41L16.17 8H6V10H16.17L13.59 12.58L15 14L20 9L15 4ZM2 2H10V0H2C0.9 0 0 0.9 0 2V16C0 17.1 0.9 18 2 18H10V16H2V2Z" fill="#505A5F"/>
-</svg>
+  <svg className={className} viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ ...styles }}>
+    <path
+      d="M15 4L13.59 5.41L16.17 8H6V10H16.17L13.59 12.58L15 14L20 9L15 4ZM2 2H10V0H2C0.9 0 0 0.9 0 2V16C0 17.1 0.9 18 2 18H10V16H2V2Z"
+      fill="#505A5F"
+    />
+  </svg>
 );
 
 export const LoginIcon = ({ className, styles }) => (
@@ -585,9 +589,11 @@ const InfoBannerIcon = ({ fill = "#3498DB" }) => {
 const InfoIcon = () => {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M9 5H11V7H9V5ZM9 9H11V15H9V9ZM10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z" fill="#505A5F"/>
+      <path
+        d="M9 5H11V7H9V5ZM9 9H11V15H9V9ZM10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
+        fill="#505A5F"
+      />
     </svg>
-
   );
 };
 
@@ -1088,6 +1094,24 @@ const InboxIcon = () => (
   </svg>
 );
 
+const TqmHomePageCardIcon = ({ className = "", fill = "", style = {} }) => (
+  <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <rect width="56" height="56" rx="2" fill="#F47738" />
+    <g clip-path="url(#clip0_52400_116661)">
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M41.332 13H14.6654C12.832 13 11.332 14.5 11.332 16.3333V39.6667C11.332 41.5 12.832 43 14.6654 43H41.332C43.1654 43 44.6654 41.5 44.6654 39.6667V16.3333C44.6654 14.5 43.1654 13 41.332 13ZM24.6654 36.3333H16.332V33H24.6654V36.3333ZM24.6654 29.6667H16.332V26.3333H24.6654V29.6667ZM24.6654 23H16.332V19.6667H24.6654V23ZM32.6987 33L27.9987 28.2667L30.3487 25.9167L32.6987 28.2833L37.982 23L40.3487 25.3667L32.6987 33Z"
+        fill="white"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_52400_116661">
+        <rect width="40" height="40" fill="white" transform="translate(8 8)" />
+      </clipPath>
+    </defs>
+  </svg>
+);
 export {
   AnnouncementIcon,
   ReceiptIcon,
@@ -1210,4 +1234,5 @@ export {
   BirthIcon,
   DeathIcon,
   InfoIcon,
+  TqmHomePageCardIcon,
 };
