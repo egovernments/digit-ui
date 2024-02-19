@@ -1094,24 +1094,6 @@ const InboxIcon = () => (
   </svg>
 );
 
-const TqmHomePageCardIcon = ({ className = "", fill = "", style = {} }) => (
-  <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
-    <rect width="56" height="56" rx="2" fill="#F47738" />
-    <g clip-path="url(#clip0_52400_116661)">
-      <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
-        d="M41.332 13H14.6654C12.832 13 11.332 14.5 11.332 16.3333V39.6667C11.332 41.5 12.832 43 14.6654 43H41.332C43.1654 43 44.6654 41.5 44.6654 39.6667V16.3333C44.6654 14.5 43.1654 13 41.332 13ZM24.6654 36.3333H16.332V33H24.6654V36.3333ZM24.6654 29.6667H16.332V26.3333H24.6654V29.6667ZM24.6654 23H16.332V19.6667H24.6654V23ZM32.6987 33L27.9987 28.2667L30.3487 25.9167L32.6987 28.2833L37.982 23L40.3487 25.3667L32.6987 33Z"
-        fill="white"
-      />
-    </g>
-    <defs>
-      <clipPath id="clip0_52400_116661">
-        <rect width="40" height="40" fill="white" transform="translate(8 8)" />
-      </clipPath>
-    </defs>
-  </svg>
-);
 export {
   AnnouncementIcon,
   ReceiptIcon,
@@ -1234,5 +1216,4 @@ export {
   BirthIcon,
   DeathIcon,
   InfoIcon,
-  TqmHomePageCardIcon,
 };
