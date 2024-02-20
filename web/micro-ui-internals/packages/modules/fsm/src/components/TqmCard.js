@@ -1,4 +1,4 @@
-import { ArrowRightInbox, ShippingTruck, EmployeeModuleCard } from "@egovernments/digit-ui-react-components";
+import { ArrowRightInbox, ShippingTruck, EmployeeModuleCard, TqmHomePageCardIcon } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -108,7 +108,7 @@ const TqmCard = ({ reRoute = true }) => {
   links = links.filter((link) => (link.roles ? checkForEmployee(link.roles) : true));
 
   const propsForModuleCard = {
-    Icon: <ShippingTruck />,
+    Icon: <TqmHomePageCardIcon />,
     moduleName: t("ACTION_TEST_TQM"),
     kpis: [
       {
