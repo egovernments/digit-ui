@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useRouteMatch } from "react-router-dom";
 import FSMCard from "./components/FsmCard";
+import TqmCard from "./components/TqmCard";
 import CheckSlum from "./pageComponents/CheckSlum";
 import SelectAddress from "./pageComponents/SelectAddress";
 import SelectChannel from "./pageComponents/SelectChannel";
@@ -58,7 +59,7 @@ import SelectLocalityOrGramPanchayat from "./pageComponents/SelectLocalityOrGram
 import SelectAgencyType from "./pageComponents/SelectAgencyType";
 
 const FSMModule = ({ stateCode, userType, tenants }) => {
-  const moduleCode = "FSM";
+  const moduleCode = ["FSM", "Tqm"];
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
@@ -207,6 +208,7 @@ const componentsToRegister = {
   ConfirmationBox,
   SelectLocalityOrGramPanchayat,
   SelectAgencyType,
+  TqmCard,
 };
 
 export const initFSMComponents = () => {

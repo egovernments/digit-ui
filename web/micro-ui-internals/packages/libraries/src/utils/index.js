@@ -17,6 +17,29 @@ const GetParamFromUrl = (key, fallback, search) => {
   return fallback;
 };
 
+
+const didEmployeeHasAtleastOneRole = (roles = []) => {
+  return roles.some((role) => didEmployeeHasRole(role));
+};
+
+const tqmAccess = () => {
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
+  const tqmRoles = ["PQM_TP_OPERATOR", "PQM_ADMIN"];
+
+  const TQM_ACCESS = userRoles?.filter((role) => tqmRoles?.includes(role));
+
+  return TQM_ACCESS?.length > 0;
+};
+
+const isPlantOperatorLoggedIn = () => {
+  return Digit.Utils.didEmployeeHasAtleastOneRole(Digit?.Customizations?.commonUiConfig?.tqmRoleMapping?.plant);
+};
+
+const isUlbAdminLoggedIn = () => {
+  return Digit.Utils.didEmployeeHasAtleastOneRole(Digit?.Customizations?.commonUiConfig?.tqmRoleMapping?.ulb);
+};
+
 const getPattern = (type) => {
   switch (type) {
     case "Name":
@@ -301,6 +324,10 @@ export default {
   tlAccess,
   wsAccess,
   swAccess,
+  didEmployeeHasAtleastOneRole,
+  tqmAccess,
+  isPlantOperatorLoggedIn,
+  isUlbAdminLoggedIn,
 
   ...privacy
 };
