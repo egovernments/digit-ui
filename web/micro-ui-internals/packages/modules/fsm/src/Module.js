@@ -59,7 +59,7 @@ import SelectLocalityOrGramPanchayat from "./pageComponents/SelectLocalityOrGram
 import SelectAgencyType from "./pageComponents/SelectAgencyType";
 
 const FSMModule = ({ stateCode, userType, tenants }) => {
-  const moduleCode = ["FSM", "Tqm"];
+  const moduleCode = ["FSM", "TQM"];
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
