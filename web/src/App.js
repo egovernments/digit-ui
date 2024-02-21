@@ -29,6 +29,7 @@ import { initEngagementComponents } from '@egovernments/digit-ui-module-engageme
 // import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonpt";
 
 import { customizations, initCustomisationComponents } from './Customisations';
+import { initTQMComponents } from '@egovernments/digit-ui-module-tqm';
 
 initLibraries();
 //"WS" removed the ws enabledModules ;
@@ -69,6 +70,7 @@ window.Digit.ComponentRegistryService.setupRegistry({
 initPGRComponents();
 initFSMComponents();
 initDSSComponents();
+initTQMComponents();
 // initMCollectComponents();
 // initHRMSComponents()
 // initTLComponents();

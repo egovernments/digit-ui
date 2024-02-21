@@ -21,6 +21,7 @@ import { initNOCComponents } from "@egovernments/digit-ui-module-noc";
 import { initWSComponents } from "@egovernments/digit-ui-module-ws";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonpt";
+import { initTQMComponents } from "@egovernments/digit-ui-module-tqm";
 
 // import {initCustomisationComponents} from "./customisations";
 
@@ -112,6 +113,7 @@ const initDigitUI = () => {
   initNOCComponents();
   initWSComponents();
   initCommonPTComponents();
+  initTQMComponents();
   // initCustomisationComponents();
 
   const moduleReducers = (initData) => ({
