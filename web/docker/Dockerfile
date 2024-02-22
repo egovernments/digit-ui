@@ -15,8 +15,8 @@ RUN cd web && yarn install
 RUN cd web && ls -lah
 RUN cd web && yarn build:webpack
 
-#FROM nginx:mainline-alpine
-FROM odhub/nginx-unprivileged
+FROM nginx:mainline-alpine
+# FROM odhub/nginx-unprivileged
 ENV WORK_DIR=/var/web/digit-ui
 
 #RUN mkdir -p ${WORK_DIR}
