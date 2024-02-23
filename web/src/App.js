@@ -48,6 +48,7 @@ const enabledModules = [
   "NOC",
   // "Engagement",
   "CommonPT",
+  "Tqm"
 ];
 window.Digit.ComponentRegistryService.setupRegistry({
   ...paymentConfigs,
