@@ -10,6 +10,8 @@ const navigateToRespectiveURL = (history = {}, url = "") => {
   if (url?.indexOf(`/${window?.contextPath}`) === -1) {
     const hostUrl = window.location.origin;
     const updatedURL = DIGIT_UI_CONTEXTS?.every((e) => url?.indexOf(`/${e}`) === -1) ? hostUrl + "/employee/" + url : hostUrl + url;
+
+    console.log("updaa",updatedURL);
     window.location.href = updatedURL;
   } else {
     history.push(url);
@@ -44,7 +46,19 @@ const navigateToRespectiveURL = (history = {}, url = "") => {
           <div className="links-wrapper" style={{ width: "80%" }}>
             {links.map(({ count, label, link }, index) => (
               <span className="link" key={index}>
-                {link ? <Link to={link}>{label}</Link> : null}
+                {link ?
+                
+                // <Link to={link}>{label}</Link> 
+                <a
+                onClick={() => {
+                  navigateToRespectiveURL(history, `${link}`);
+                }}
+              >
+{label}
+              </a>
+                
+                
+                : null}
                 {count ? (
                   <>
                     {FsmHideCount ? null : <span className={"inbox-total"}>{count || "-"}</span>}
