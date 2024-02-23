@@ -131,7 +131,7 @@ const TqmCard = ({ reRoute = true }) => {
   if (isLoading) {
     return <Loader />;
   }
-  return <EmployeeModuleCard {...propsForModuleCard} />;
+  return <EmployeeModuleCard {...propsForModuleCard}  TqmEnableUrl ={true}/>;
 };
 
 export default TqmCard;
