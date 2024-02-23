@@ -3,6 +3,18 @@ import { ArrowRightInbox } from "./svgindex";
 import { Link } from "react-router-dom";
 
 const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], isCitizen = false, className, styles, longModuleName=false, FsmHideCount }) => {
+
+  const DIGIT_UI_CONTEXTS = ["digit-ui", "works-ui", "workbench-ui", "health-ui", "sanitation-ui", "core-ui","tqm-ui"];
+
+const navigateToRespectiveURL = (history = {}, url = "") => {
+  if (url?.indexOf(`/${window?.contextPath}`) === -1) {
+    const hostUrl = window.location.origin;
+    const updatedURL = DIGIT_UI_CONTEXTS?.every((e) => url?.indexOf(`/${e}`) === -1) ? hostUrl + "/employee/" + url : hostUrl + url;
+    window.location.href = updatedURL;
+  } else {
+    history.push(url);
+  }
+};
   return (
     <div className={className ? className : "employeeCard customEmployeeCard card-home home-action-cards"} style={styles ? styles : {}}>
       <div className="complaint-links-container">
@@ -36,9 +48,18 @@ const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], isCitizen
                 {count ? (
                   <>
                     {FsmHideCount ? null : <span className={"inbox-total"}>{count || "-"}</span>}
-                    <Link to={link}>
+
+                    <a
+                      onClick={() => {
+                        navigateToRespectiveURL(history, `${link}`);
+                      }}
+                    >
+                                            <ArrowRightInbox />
+
+                    </a>
+                    {/* <Link to={link}>
                       <ArrowRightInbox />
-                    </Link>
+                    </Link> */}
                   </>
                 ) : null}
               </span>
