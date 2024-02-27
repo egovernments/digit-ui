@@ -1,4 +1,4 @@
-import { ArrowRightInbox, ShippingTruck, EmployeeModuleCard,  } from "@egovernments/digit-ui-react-components";
+import { ArrowRightInbox, ShippingTruck, EmployeeModuleCard } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -48,7 +48,7 @@ const TqmCard = ({ reRoute = true }) => {
       },
     },
   };
-  const { isLoading: isLoadingPlantUsers, data: dataPlantUsers } = Digit.Hooks.useCustomAPIHook(requestCriteriaPlantUsers);
+  const { isLoading: isLoadingPlantUsers, data: dataPlantUsers } = Digit.Hooks.useCustomAPITqmHook(requestCriteriaPlantUsers);
 
   const requestCriteria = {
     url: "/inbox/v2/_search",
@@ -84,7 +84,7 @@ const TqmCard = ({ reRoute = true }) => {
     requestCriteria.body.inbox.moduleSearchCriteria.plantCodes = [...activePlantCode];
   }
 
-  const { isLoading, data: tqmInboxData } = Digit.Hooks.useCustomAPIHook(requestCriteria);
+  const { isLoading, data: tqmInboxData } = Digit.Hooks.useCustomAPITqmHook(requestCriteria);
 
   let links = [
     {
@@ -131,7 +131,7 @@ const TqmCard = ({ reRoute = true }) => {
   if (isLoading) {
     return <Loader />;
   }
-  return <EmployeeModuleCard {...propsForModuleCard}  TqmEnableUrl ={true}/>;
+  return <EmployeeModuleCard {...propsForModuleCard} TqmEnableUrl={true} />;
 };
 
 export default TqmCard;

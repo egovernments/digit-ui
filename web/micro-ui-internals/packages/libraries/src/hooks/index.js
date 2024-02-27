@@ -244,6 +244,7 @@ import useBillAmendmentInbox from "./billAmendment/useInbox";
 import { usePrivacyContext } from "./usePrivacyContext";
 import useToCheckPrivacyEnablement from "./ws/useToCheckPrivacyEnablement";
 import useWSConfigMDMS from "./ws/useWSConfigMDMS";
+import useCustomAPITqmHook from "./useCustomApiTqmHook";
 
 const pgr = {
   useComplaintDetails,
@@ -544,6 +545,7 @@ const Hooks = {
   useBulkPdfDetails,
   useBillAmendmentInbox,
   useAudit,
+  useCustomAPITqmHook,
 };
 
 export default Hooks;
