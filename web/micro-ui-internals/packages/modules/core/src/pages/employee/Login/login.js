@@ -55,6 +55,10 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
       redirectPath = "/digit-ui/employee/dss/landing/home";
     }
 
+    if (user?.info?.roles && user?.info?.roles?.length > 0 && user?.info?.roles?.every((e) => e.code === "PQM_TP_OPERATOR")) {
+      redirectPath = "/tqm-ui/employee/tqm/landing";
+    }
+
     history.replace(redirectPath);
   }, [user]);
 
