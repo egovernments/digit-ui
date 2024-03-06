@@ -16,7 +16,8 @@ const TqmCard = ({ reRoute = true }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
-  if (!Digit.Utils.tqmAccess) {
+
+  if (!Digit.Utils.tqmAccess()) {
     return null;
   }
 
