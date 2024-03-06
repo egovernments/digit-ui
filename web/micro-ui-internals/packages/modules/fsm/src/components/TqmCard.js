@@ -10,6 +10,7 @@ const ROLES = {
 };
 
 const TqmCard = ({ reRoute = true }) => {
+  debugger;
   const history = useHistory();
   const isMobile = Digit.Utils.browser.isMobile();
   const isPlantOperatorLoggedIn = Digit.Utils.isPlantOperatorLoggedIn();
@@ -76,6 +77,9 @@ const TqmCard = ({ reRoute = true }) => {
     },
   };
 
+  console.log("RUNNING123", dataPlantUsers?.length > 0
+  ? Digit.Utils.didEmployeeHasAtleastOneRole(ROLES.plant) || Digit.Utils.didEmployeeHasAtleastOneRole(ROLES.ulb)
+  : false)
   const activePlantCode = Digit.SessionStorage.get("active_plant")?.plantCode
     ? [Digit.SessionStorage.get("active_plant")?.plantCode]
     : Digit.SessionStorage.get("user_plants")
@@ -86,6 +90,8 @@ const TqmCard = ({ reRoute = true }) => {
   }
 
   const { isLoading, data: tqmInboxData } = Digit.Hooks.useCustomAPIHook(requestCriteria);
+
+  console.log("tqm",tqmInboxData,);
 
   let links = [
     {

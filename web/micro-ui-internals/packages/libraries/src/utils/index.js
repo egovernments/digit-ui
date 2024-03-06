@@ -22,22 +22,29 @@ const didEmployeeHasAtleastOneRole = (roles = []) => {
   return roles.some((role) => didEmployeeHasRole(role));
 };
 
+
+const ROLES = {
+  plant: ["PQM_TP_OPERATOR"],
+  ulb: ["PQM_ADMIN"],
+};
 const tqmAccess = () => {
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
   const tqmRoles = ["PQM_TP_OPERATOR", "PQM_ADMIN"];
+  
 
   const TQM_ACCESS = userRoles?.filter((role) => tqmRoles?.includes(role));
 
   return TQM_ACCESS?.length > 0;
 };
 
+
 const isPlantOperatorLoggedIn = () => {
-  return Digit.Utils.didEmployeeHasAtleastOneRole(Digit?.Customizations?.commonUiConfig?.tqmRoleMapping?.plant);
+  return Digit.Utils.didEmployeeHasAtleastOneRole(Object.values(ROLES).flatMap((e) => e));
 };
 
 const isUlbAdminLoggedIn = () => {
-  return Digit.Utils.didEmployeeHasAtleastOneRole(Digit?.Customizations?.commonUiConfig?.tqmRoleMapping?.ulb);
+  return Digit.Utils.didEmployeeHasAtleastOneRole(Object.values(ROLES).flatMap((e) => e));
 };
 
 const getPattern = (type) => {
