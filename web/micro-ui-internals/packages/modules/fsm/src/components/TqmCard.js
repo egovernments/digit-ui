@@ -23,33 +23,61 @@ const TqmCard = ({ reRoute = true }) => {
   }
 
   //searching for plants linked to this user
+
+
   const userInfo = Digit.UserService.getUser();
+
+
   const requestCriteriaPlantUsers = {
-    params: {},
-    url: "/pqm-service/plant/user/v1/_search",
-    body: {
-      plantUserSearchCriteria: {
+    params:{},
+    url:'/pqm-service/plant/user/v1/_search',
+    body:{
+      "plantUserSearchCriteria": {
         tenantId,
         // "plantCodes": [],
-        plantUserUuids: userInfo?.info?.uuid ? [userInfo?.info?.uuid] : [],
-        additionalDetails: {},
+        "plantUserUuids": userInfo?.info?.uuid ?  [userInfo?.info?.uuid]: [],
+        "additionalDetails": {}
       },
-      pagination: {},
+      "pagination": {}
     },
     config: {
-      select: (data) => {
-        let userPlants = data?.plantUsers
-          ?.map((row) => {
-            row.i18nKey = `PQM_PLANT_${row?.plantCode}`;
-            return row;
-          })
-          ?.filter((row) => row.isActive);
+      select:(data)=> {
+        let userPlants =  data?.plantUsers?.map(row => {
+          row.i18nKey = `PQM_PLANT_${row?.plantCode}`
+          return row
+        })?.filter(row=>row.isActive)
         // userPlants.push({i18nKey:"PQM_PLANT_DEFAULT_ALL"})
-        Digit.SessionStorage.set("user_plants", userPlants);
-        return userPlants;
-      },
-    },
-  };
+        Digit.SessionStorage.set("user_plants",userPlants );
+        return userPlants
+      }
+    }
+  }
+  // const requestCriteriaPlantUsers = {
+  //   params: {},
+  //   url: "/pqm-service/plant/user/v1/_search",
+  //   body: {
+  //     plantUserSearchCriteria: {
+  //       tenantId,
+  //       // "plantCodes": [],
+  //       plantUserUuids: userInfo?.info?.uuid ? [userInfo?.info?.uuid] : [],
+  //       additionalDetails: {},
+  //     },
+  //     pagination: {},
+  //   },
+  //   config: {
+  //     select: (data) => {
+  //       let userPlants = data?.plantUsers
+  //         ?.map((row) => {
+  //           row.i18nKey = `PQM_PLANT_${row?.plantCode}`;
+  //           return row;
+  //         })
+  //         ?.filter((row) => row.isActive);
+  //       // userPlants.push({i18nKey:"PQM_PLANT_DEFAULT_ALL"})
+  //       Digit.SessionStorage.set("user_plants", userPlants);
+  //       return userPlants;
+  //     },
+  //   },
+  // };
   const { isLoading: isLoadingPlantUsers, data: dataPlantUsers } = Digit.Hooks.useCustomAPIHook(requestCriteriaPlantUsers);
 
   const requestCriteria = {
