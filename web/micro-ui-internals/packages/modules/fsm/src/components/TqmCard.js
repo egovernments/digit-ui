@@ -152,14 +152,12 @@ const TqmCard = ({ reRoute = true }) => {
     links: links,
   };
 
-  console.log("tqmmmmm",isPlantOperatorLoggedIn);
 
   if (isPlantOperatorLoggedIn) {
     delete propsForModuleCard.kpis;
     delete propsForModuleCard.links[2];
   }
   if (reRoute && isPlantOperatorLoggedIn) {
-    console.log("hehehehehheeh");
     window.location.href = '/tqm-ui/employee/tqm/landing';
 }
 
