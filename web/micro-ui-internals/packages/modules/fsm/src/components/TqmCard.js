@@ -23,6 +23,7 @@ const TqmCard = ({ reRoute = true }) => {
   //searching for plants linked to this user
 
   const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
 
   const requestCriteriaPlantUsers = {
     params: {},
@@ -77,7 +78,6 @@ const TqmCard = ({ reRoute = true }) => {
   //   },
   // };
   const { isLoading: isLoadingPlantUsers, data: dataPlantUsers } = Digit.Hooks.useCustomAPIHook(requestCriteriaPlantUsers);
-  console.log(dataPlantUsers);
   const requestCriteria = {
     url: "/inbox/v2/_search",
     body: {
@@ -152,11 +152,20 @@ const TqmCard = ({ reRoute = true }) => {
     delete propsForModuleCard.kpis;
     delete propsForModuleCard.links[2];
   }
+
   if (reRoute) {
-    if (isPlantOperatorLoggedIn()) {
-      window.location.href = "/tqm-ui/employee/tqm/landing";
-    } else if (isUlbAdminLoggedIn()) {
-      window.location.href = "/tqm-ui/employee";
+    if (userRoles.length === 1) {
+      const role = userRoles[0];
+      let redirectUrl;
+      switch (role) {
+        case "PQM_TP_OPERATOR":
+          redirectUrl = "/tqm-ui/employee/tqm/landing";
+          break;
+        case "PQM_ADMIN":
+          redirectUrl = "/tqm-ui/employee";
+          break;
+      }
+      window.location.href = redirectUrl;
     }
   }
 
