@@ -1,4 +1,4 @@
-import { ArrowRightInbox, ShippingTruck, EmployeeModuleCard,Loader  } from "@egovernments/digit-ui-react-components";
+import { ArrowRightInbox, ShippingTruck, EmployeeModuleCard, Loader } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -10,13 +10,11 @@ const ROLES = {
 };
 
 const TqmCard = ({ reRoute = true }) => {
-  debugger;
   const history = useHistory();
   const isMobile = Digit.Utils.browser.isMobile();
   const isPlantOperatorLoggedIn = Digit.Utils.isPlantOperatorLoggedIn();
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-
 
   if (!Digit.Utils.tqmAccess()) {
     return null;
@@ -24,34 +22,34 @@ const TqmCard = ({ reRoute = true }) => {
 
   //searching for plants linked to this user
 
-
   const userInfo = Digit.UserService.getUser();
 
-
   const requestCriteriaPlantUsers = {
-    params:{},
-    url:'/pqm-service/plant/user/v1/_search',
-    body:{
-      "plantUserSearchCriteria": {
+    params: {},
+    url: "/pqm-service/plant/user/v1/_search",
+    body: {
+      plantUserSearchCriteria: {
         tenantId,
         // "plantCodes": [],
-        "plantUserUuids": userInfo?.info?.uuid ?  [userInfo?.info?.uuid]: [],
-        "additionalDetails": {}
+        plantUserUuids: userInfo?.info?.uuid ? [userInfo?.info?.uuid] : [],
+        additionalDetails: {},
       },
-      "pagination": {}
+      pagination: {},
     },
     config: {
-      select:(data)=> {
-        let userPlants =  data?.plantUsers?.map(row => {
-          row.i18nKey = `PQM_PLANT_${row?.plantCode}`
-          return row
-        })?.filter(row=>row.isActive)
+      select: (data) => {
+        let userPlants = data?.plantUsers
+          ?.map((row) => {
+            row.i18nKey = `PQM_PLANT_${row?.plantCode}`;
+            return row;
+          })
+          ?.filter((row) => row.isActive);
         // userPlants.push({i18nKey:"PQM_PLANT_DEFAULT_ALL"})
-        Digit.SessionStorage.set("user_plants",userPlants );
-        return userPlants
-      }
-    }
-  }
+        Digit.SessionStorage.set("user_plants", userPlants);
+        return userPlants;
+      },
+    },
+  };
   // const requestCriteriaPlantUsers = {
   //   params: {},
   //   url: "/pqm-service/plant/user/v1/_search",
@@ -79,7 +77,7 @@ const TqmCard = ({ reRoute = true }) => {
   //   },
   // };
   const { isLoading: isLoadingPlantUsers, data: dataPlantUsers } = Digit.Hooks.useCustomAPIHook(requestCriteriaPlantUsers);
-
+  console.log(dataPlantUsers);
   const requestCriteria = {
     url: "/inbox/v2/_search",
     body: {
@@ -105,7 +103,6 @@ const TqmCard = ({ reRoute = true }) => {
     },
   };
 
-  
   const activePlantCode = Digit.SessionStorage.get("active_plant")?.plantCode
     ? [Digit.SessionStorage.get("active_plant")?.plantCode]
     : Digit.SessionStorage.get("user_plants")
@@ -116,7 +113,6 @@ const TqmCard = ({ reRoute = true }) => {
   }
 
   const { isLoading, data: tqmInboxData } = Digit.Hooks.useCustomAPIHook(requestCriteria);
-
 
   let links = [
     {
@@ -152,19 +148,22 @@ const TqmCard = ({ reRoute = true }) => {
     links: links,
   };
 
-
   if (isPlantOperatorLoggedIn) {
     delete propsForModuleCard.kpis;
     delete propsForModuleCard.links[2];
   }
-  if (reRoute && isPlantOperatorLoggedIn) {
-    window.location.href = '/tqm-ui/employee/tqm/landing';
-}
+  if (reRoute) {
+    if (isPlantOperatorLoggedIn()) {
+      window.location.href = "/tqm-ui/employee/tqm/landing";
+    } else if (isUlbAdminLoggedIn()) {
+      window.location.href = "/tqm-ui/employee";
+    }
+  }
 
   if (isLoading) {
     return <Loader />;
   }
-  return <EmployeeModuleCard {...propsForModuleCard}  TqmEnableUrl ={true}/>;
+  return <EmployeeModuleCard {...propsForModuleCard} TqmEnableUrl={true} />;
 };
 
 export default TqmCard;
