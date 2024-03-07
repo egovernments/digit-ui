@@ -30,6 +30,9 @@ const FSMCard = () => {
   const [total, setTotal] = useState("-");
   const isPlantOperatorLoggedIn = Digit.Utils.isPlantOperatorLoggedIn();
 
+
+  console.log("isssss",isPlantOperatorLoggedIn);
+
   // Septage ready for Disposal ( 10 KL)
   // Septage disposed today ( 50 KL)
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -208,9 +211,9 @@ const FSMCard = () => {
         delete propsForModuleCard.kpis;
         delete propsForModuleCard.links[2];
       }
-      if (reRoute && isPlantOperatorLoggedIn) {
-        history.push(`/tqm-ui/employee/tqm/landing`);
-      }
+      // if (reRoute && isPlantOperatorLoggedIn) {
+      //   history.push(`/tqm-ui/employee/tqm/landing`);
+      // }
   return <EmployeeModuleCard {...propsForModuleCard} FsmHideCount={true} />;
 };
 export default FSMCard;

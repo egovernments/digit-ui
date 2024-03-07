@@ -105,9 +105,7 @@ const TqmCard = ({ reRoute = true }) => {
     },
   };
 
-  console.log("RUNNING123", dataPlantUsers?.length > 0
-  ? Digit.Utils.didEmployeeHasAtleastOneRole(ROLES.plant) || Digit.Utils.didEmployeeHasAtleastOneRole(ROLES.ulb)
-  : false)
+  
   const activePlantCode = Digit.SessionStorage.get("active_plant")?.plantCode
     ? [Digit.SessionStorage.get("active_plant")?.plantCode]
     : Digit.SessionStorage.get("user_plants")
@@ -119,7 +117,6 @@ const TqmCard = ({ reRoute = true }) => {
 
   const { isLoading, data: tqmInboxData } = Digit.Hooks.useCustomAPIHook(requestCriteria);
 
-  console.log("tqm",tqmInboxData,);
 
   let links = [
     {
@@ -155,13 +152,16 @@ const TqmCard = ({ reRoute = true }) => {
     links: links,
   };
 
+  console.log("tqmmmmm",isPlantOperatorLoggedIn);
+
   if (isPlantOperatorLoggedIn) {
     delete propsForModuleCard.kpis;
     delete propsForModuleCard.links[2];
   }
   if (reRoute && isPlantOperatorLoggedIn) {
-    history.push(`/tqm-ui/employee/tqm/landing`);
-  }
+    console.log("hehehehehheeh");
+    window.location.href = '/tqm-ui/employee/tqm/landing';
+}
 
   if (isLoading) {
     return <Loader />;
