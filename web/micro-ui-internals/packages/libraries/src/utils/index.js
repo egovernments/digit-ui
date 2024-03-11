@@ -5,7 +5,7 @@ import * as locale from "./locale";
 import * as obps from "./obps";
 import * as pt from "./pt";
 import * as privacy from "./privacy";
-import PDFUtil, { downloadReceipt ,downloadPDFFromLink,downloadBill ,getFileUrl} from "./pdf";
+import PDFUtil, { downloadReceipt, downloadPDFFromLink, downloadBill, getFileUrl } from "./pdf";
 import getFileTypeFromFileStoreURL from "./fileType";
 
 const GetParamFromUrl = (key, fallback, search) => {
@@ -17,11 +17,14 @@ const GetParamFromUrl = (key, fallback, search) => {
   return fallback;
 };
 
-
 const didEmployeeHasAtleastOneRole = (roles = []) => {
   return roles.some((role) => didEmployeeHasRole(role));
 };
 
+const ROLES = {
+  plant: ["PQM_TP_OPERATOR"],
+  ulb: ["PQM_ADMIN"],
+};
 const tqmAccess = () => {
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
@@ -33,11 +36,11 @@ const tqmAccess = () => {
 };
 
 const isPlantOperatorLoggedIn = () => {
-  return Digit.Utils.didEmployeeHasAtleastOneRole(Digit?.Customizations?.commonUiConfig?.tqmRoleMapping?.plant);
+  return Digit.Utils.didEmployeeHasAtleastOneRole(ROLES.plant);
 };
 
 const isUlbAdminLoggedIn = () => {
-  return Digit.Utils.didEmployeeHasAtleastOneRole(Digit?.Customizations?.commonUiConfig?.tqmRoleMapping?.ulb);
+  return Digit.Utils.didEmployeeHasAtleastOneRole(ROLES.ulb);
 };
 
 const getPattern = (type) => {
@@ -176,9 +179,7 @@ const NOCAccess = () => {
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
 
-  const NOC_ROLES = [
-    "FIRE_NOC_APPROVER"
-  ]
+  const NOC_ROLES = ["FIRE_NOC_APPROVER"];
 
   const NOC_ACCESS = userRoles?.filter((role) => NOC_ROLES?.includes(role));
 
@@ -272,7 +273,7 @@ const hrmsAccess = () => {
 const wsAccess = () => {
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
-  const waterRoles = ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER","WS_CLERK"];
+  const waterRoles = ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"];
 
   const WS_ACCESS = userRoles?.filter((role) => waterRoles?.includes(role));
 
@@ -282,13 +283,12 @@ const wsAccess = () => {
 const swAccess = () => {
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
-  const sewerageRoles = ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER","SW_CLERK"];
+  const sewerageRoles = ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"];
 
   const SW_ACCESS = userRoles?.filter((role) => sewerageRoles?.includes(role));
 
   return SW_ACCESS?.length > 0;
 };
-
 
 export default {
   pdf: PDFUtil,
@@ -329,5 +329,5 @@ export default {
   isPlantOperatorLoggedIn,
   isUlbAdminLoggedIn,
 
-  ...privacy
+  ...privacy,
 };

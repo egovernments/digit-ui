@@ -29,14 +29,12 @@ import { CustomService } from "../services/elements/CustomService";
  * @returns {Object} Returns the object which contains data and isLoading flag
  */
 
-const useCustomAPIHook = (props) => {
-  const { url = "", method, params, body, config = {}, plainAccessRequest, changeQueryName = "Random" } = props;
-
+const useCustomAPIHook = ({ url, params, body, config = {}, plainAccessRequest, changeQueryName = "Random" }) => {
   const client = useQueryClient();
 
-  const { isLoading, data, isFetching } = useQuery(
+  const { isLoading, data, isFetching, refetch } = useQuery(
     [url, changeQueryName].filter((e) => e),
-    () => CustomService.getResponse({ url, params, method, body, plainAccessRequest }),
+    () => CustomService.getResponse({ url, params, body, plainAccessRequest }),
     {
       cacheTime: 0,
       ...config,
@@ -47,8 +45,9 @@ const useCustomAPIHook = (props) => {
     isLoading,
     isFetching,
     data,
+    refetch,
     revalidate: () => {
-      data && client.invalidateQueries({ queryKey: [url]?.filter((e) => e) });
+      data && client.invalidateQueries({ queryKey: [url].filter((e) => e) });
     },
   };
 };
