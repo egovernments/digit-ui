@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { FormComposer, Loader, Header } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Loader, Header, Toast } from "@egovernments/digit-ui-react-components";
 import { set } from "lodash";
 
 
@@ -10,7 +10,9 @@ const GarimaDetails = (props) => {
     const { t } = useTranslation();
     let { id: applicationNumber } = useParams();
     const stateCode = Digit.ULBService.getStateId();
-    const [ garimaApplicationData, setGarimaApplicatinData ] = useState("")
+    const [ garimaApplicationData, setGarimaApplicatinData ] = useState("");
+    const [ garimaDriverData, setGarimaDriverData ] = useState([])
+    const [showToast, setShowToast] = useState(null);
 
 
     const { data: vehicleList, isLoading: isVehicleData, isSuccess: isVehicleDataLoaded } = Digit.Hooks.fsm.useMDMS(
@@ -28,15 +30,52 @@ const GarimaDetails = (props) => {
 
     const {
         isLoading: isDriverLoading,
-        isError: isDriverError,
-        data: driverData,
-        error: driverError,
-        mutate,
-    } = Digit.Hooks.fsm.useGarimaSearchActions(tenantId);
+        isError: driverUpdateError,
+        data: updateDriverResponse,
+        error: updateDriverError,
+        mutate: mutateDriver,
+    } = Digit.Hooks.fsm.useApplicationUpdate(tenantId);
+
+    
+
+    // const {
+    //     isLoading: isDriverLoading,
+    //     isError: isDriverError,
+    //     data: driverData,
+    //     error: driverError,
+    //     mutate,
+    // } = Digit.Hooks.fsm.useGarimaSearchActions(tenantId);
 
     const onSubmit = (data) => {
-        console.log("DATA SUBMITTED")
+        let sanitationDetails = [data.garimaDriverDetails,...data.garimaHelperDetails.helperList];
+        console.log(applicationData,"applicationData")
+        
+        const createPayload = {
+            "fsm":{
+                ...applicationData,
+                sanitationWorker:sanitationDetails,
+                vehicleId: data.vehicleNumber.id,
+            },
+            "workflow": {
+                "action": "DSO_ACCEPT"
+            },
+            
+        };
+        mutateDriver(createPayload, {
+            onError: (error, variables) => {
+              setShowToast({ key: "error", action: error?.response?.data?.Errors[0].message});
+              setTimeout(closeToast, 5000);
+            },
+            onSuccess: (data, variables) => {
+                setShowToast({ key: "success", action: "CS_COMMON_TRACK_APPLICATION_TEXT"});
+                history.push("/digit-ui/employee/fsm/application-details/" + applicationNumber)
+            },
+        });
     };
+
+    const closeToast = () => {
+		setShowToast(null);
+	};
 
     useEffect(()=>{
         setGarimaApplicatinData(applicationData)
@@ -44,24 +83,23 @@ const GarimaDetails = (props) => {
     
 
     const onFormValueChange = (setValue, formData) => {
-        // console.log(formData,"VALUE CHANGED")
     };
-
     
-    
-    const searchGarimaWorkerDetails = (data) => {
-        console.log(data,"qwertyuio")
-        
-        mutate(data, {
-          onError: (error, variables) => {
-            setShowToast({ key: "error", action: error });
-            setTimeout(closeToast, 5000);
-          },
-          onSuccess: (data, variables) => {
-            console.log("Success")
-          },
-        });
-    };
+    // const searchGarimaWorkerDetails = (data, configKey, formData, onSelect) => {
+    //     mutate(data, {
+    //       onError: (error, variables) => {
+    //         setShowToast({ key: "error", action: error });
+    //         setTimeout(closeToast, 5000);
+    //       },
+    //       onSuccess: (data, variables) => {
+    //         setGarimaDriverData (data)
+    //         let garimaDriverDetails = formData.garimaDriverDetails || {};
+    //         garimaDriverDetails.garimaDriverMobileNumber = data[0].mobile_number;
+    //         garimaDriverDetails.garimaDriverName =  `P${data[0].garima_id}`;
+    //         onSelect(configKey, { ...formData[configKey], garimaDriverDetails: garimaDriverDetails });
+    //       },
+    //     });
+    // };
 
     const configs = [
         {
@@ -95,14 +133,15 @@ const GarimaDetails = (props) => {
             ]
         },
         {
-            head: "Assign Saniation Worker",
+            head: "ASSIGN_SANIATION_WORKER",
             body: [
                 {
                     "type": "component",
                     "key": "garimaDriverDetails",
                     "component": "SelectGraimaDriver",
                     "withoutLabel": true,
-                    "searchGarimaWorkerDetails": searchGarimaWorkerDetails,
+                    // "searchGarimaWorkerDetails": searchGarimaWorkerDetails,
+                    // "garimaDriverData": garimaDriverData
                 },
                 {
                     "isMandatory": true,
@@ -110,10 +149,10 @@ const GarimaDetails = (props) => {
                     "key": "garimaHelperDetails",
                     "component": "SelectGraimaHelper",
                     "withoutLabel": true,
-                    "searchGarimaWorkerDetails": searchGarimaWorkerDetails,
+                    // "searchGarimaWorkerDetails": searchGarimaWorkerDetails,
                 },
                 {
-                    "label": "Can't find the saniation worker?",
+                    "label": "FSM_ADD_NEW_SANIATION_WORKER_LABEL",
                     "isMandatory": true,
                     "type": "component",
                     "key": "addSaniationWorker",
@@ -123,12 +162,14 @@ const GarimaDetails = (props) => {
             ]
         }
     ];
+
     
+
     return (
         <React.Fragment>
-            <Header style={{ marginBottom: "16px" }}>{"Assign Vehicle and Sanitation Worker"}</Header>
+            <Header style={{ marginBottom: "16px" }}>{t("FSM_ASSIGN_VEHICLE_AND_SANITATION_WORKER")}</Header>
             <FormComposer
-                isDisabled={true}
+                isDisabled={false}
                 label={t("ES_COMMON_APPLICATION_SUBMIT")}
                 config={configs
                     .filter((i) => !i.hideInEmployee)
@@ -146,7 +187,13 @@ const GarimaDetails = (props) => {
                 noBreakLine={true}
                 fms_inline
             />
-            
+            {showToast && (
+				<Toast
+					error={showToast.key === "error" ? true : false}
+					label={t(showToast.key === "success" ? showToast.action : `ES_FSM_RESPONSE_SUBMIT_DISPLAY_ERROR`)}
+					onClose={closeToast}
+				/>
+			)}
         </React.Fragment>
     );
 };

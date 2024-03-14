@@ -1,11 +1,12 @@
-import { CardLabel, CardSectionHeader, DatePicker, Dropdown, LabelFieldPair, RadioButtons, TextInput } from "@egovernments/digit-ui-react-components";
-import React from "react";
+import { CardLabel, CardSectionHeader, DatePicker, Dropdown, LabelFieldPair, RadioButtons, TextInput, Toast } from "@egovernments/digit-ui-react-components";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const GarimaPersonalDetails = ({ config, onSelect, formData = {}, userType, id }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const mobileView = Digit.Utils.browser.isMobile() ? true : false;
   const { t } = useTranslation();
+  const [showToast, setShowToast] = useState(null);
 
   const formConfig = [
     {
@@ -14,6 +15,7 @@ const GarimaPersonalDetails = ({ config, onSelect, formData = {}, userType, id }
           label: "COMMON_ASSIGN_AS",
           type: "radio",
           name: "assignAs",
+          isMandatory: true,
           options: [
             {
               active: true,
@@ -32,7 +34,7 @@ const GarimaPersonalDetails = ({ config, onSelect, formData = {}, userType, id }
       ],
     },
     {
-      head: "ES_FSM_GARIMA_WORKER_PERSONAL_DETAILS",
+      head: "CS_FSM_PERSONAL_DETAILS",
       inputs: [
         {
           label: "ES_GARIMA_AADHAR_NUMBER",
@@ -75,7 +77,7 @@ const GarimaPersonalDetails = ({ config, onSelect, formData = {}, userType, id }
           isMandatory: true,
         },
         {
-          label: "COMMON_GENDER",
+          label: "CS_FSM_GENDER",
           type: "radio",
           name: "applicantGender",
           options: [
@@ -115,6 +117,10 @@ const GarimaPersonalDetails = ({ config, onSelect, formData = {}, userType, id }
   const handleDate = (value, input) => {
     onSelect(config.key, { ...formData[config.key], [input]: value });
   };
+
+  const closeToast = () => {
+		setShowToast(null);
+	};
 
   return (
     <div style={{ margin: "16px" }}>
@@ -179,6 +185,13 @@ const GarimaPersonalDetails = ({ config, onSelect, formData = {}, userType, id }
           ))}
         </React.Fragment>
       ))}
+      {showToast && (
+				<Toast
+					error={showToast.key === "error" ? true : false}
+					label={t(showToast.key === "success" ? showToast.action : `COMMON_NO_RESULTS_FOUND`)}
+					onClose={closeToast}
+				/>
+			)}
     </div>
   );
 };

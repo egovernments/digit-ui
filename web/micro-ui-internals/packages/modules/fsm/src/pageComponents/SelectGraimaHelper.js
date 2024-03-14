@@ -1,42 +1,70 @@
 import React, { useState } from "react";
-import { LabelFieldPair, CardLabel, TextInput, CardLabelError, Dropdown, Card, Header } from "@egovernments/digit-ui-react-components";
+import { LabelFieldPair, CardLabel, TextInput, CardLabelError, Dropdown, Card, Header, Toast } from "@egovernments/digit-ui-react-components";
 import { DustbinIcon } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 
 const SelectGraimaHelper = ({ t, config, onSelect, formData = {}, errors }) => {
 	const tenantId = Digit.ULBService.getCurrentTenantId();
+	const [showToast, setShowToast] = useState(null);
+
+	const {
+		isLoading: isDriverLoading,
+		isError: isDriverError,
+		data: driverData,
+		error: driverError,
+		mutate,
+	} = Digit.Hooks.fsm.useGarimaSearchActions(tenantId);
 
 	const addExtraHelperDetails = () => {
 		let garimaHelperDetails = formData.garimaHelperDetails;
 		garimaHelperDetails.helperList.push({
-			helperName: "",
-			helperId: ""
+			garima_id: "",
+			mobile_number: ""
 		})
-		onSelect(config.key, { ...formData[config.key], garimaHelperDetails: garimaHelperDetails });
+		onSelect(config.key, { ...garimaHelperDetails });
 	}
 
 	const removeHelper = (index) => {
 		let garimaHelperDetails = formData.garimaHelperDetails;
 		garimaHelperDetails.helperList.splice(index, 1);
-		onSelect(config.key, { ...formData[config.key], garimaHelperDetails: garimaHelperDetails });
+		onSelect(config.key, { ...garimaHelperDetails });
 
 	}
+
+	const closeToast = () => {
+		setShowToast(null);
+	  };
 
 	function setValue(value, input, index) {
 		let garimaHelperDetails = formData.garimaHelperDetails;
-		garimaHelperDetails.helperList[index][input] = value
-		onSelect(config.key, { ...formData[config.key], garimaHelperDetails: garimaHelperDetails });
-		if (input === "helperName" && value?.length === 9){
-			config.searchGarimaWorkerDetails(value)
+		garimaHelperDetails.helperList[index][input] = value;
+		if (input === "garima_id" && value?.length === 9) {
+			mutate(value, {
+				onError: (error, variables) => {
+					setShowToast({ key: "error", action: error });
+					setTimeout(closeToast, 50000);
+				},
+				onSuccess: (data, variables) => {
+					Object.keys(data[0]).map((ele)=>{
+						garimaHelperDetails.helperList[index][ele] = data[0][ele]
+					})
+					// garimaHelperDetails.helperList[index].mobile_number = data[0].mobile_number;
+					garimaHelperDetails.helperList[index].workerType = "HELPER";
+					onSelect(config.key, { ...garimaHelperDetails });
+
+				},
+			});
+		} else {
+			onSelect(config.key, { ...garimaHelperDetails });
 		}
 	}
 
-	if (!formData?.garimaHelperDetails) {
+	if (!formData?.garimaHelperDetails?.helperList) { //By default adding the helper data
 		formData.garimaHelperDetails = {
 			helperList: [
 				{
-					helperName: "",
-					helperId: ""
+					garima_id: "",
+					mobile_number: ""
 				}
 
 			]
@@ -45,20 +73,22 @@ const SelectGraimaHelper = ({ t, config, onSelect, formData = {}, errors }) => {
 
 	let inputs = [
 		{
-			label: "Assign Helper",
+			label: "ASSIGN_HELPER",
 			type: "text",
-			name: "helperName",
+			name: "garima_id",
 			validation: {
 				isRequired: true,
-				pattern: "^[a-zA-Z]+( [a-zA-Z]+)*$",
+				pattern: "^[A-Za-z][0-9]{8}$",
 				title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
+				maxlength: "9",
+      			minlength: "9",
 			},
 			isMandatory: true,
 		},
 		{
-			label: "Add Helper's Mobile Number",
+			label: "ADD_HELPER_MOBILE_NUMBER",
 			type: "text",
-			name: "helperId",
+			name: "mobile_number",
 			validation: {
 				isRequired: true,
 				pattern: "[6-9]{1}[0-9]{9}",
@@ -70,8 +100,6 @@ const SelectGraimaHelper = ({ t, config, onSelect, formData = {}, errors }) => {
 		},
 	]
 
-	console.log(formData,"formData 11111111111111");
-	console.log(config,"config 1111111111");
 
 	return (
 		<div>
@@ -81,8 +109,8 @@ const SelectGraimaHelper = ({ t, config, onSelect, formData = {}, errors }) => {
 						<Card className="garimaHelper_wrapper">
 							<React.Fragment>
 								<div style={{ display: "flex", justifyContent: "space-between" }}>
-									<h4 style={{ marginBottom: "16px", fontSize: "24px", fontWeight: "bold" }}>{`Helper ${index + 1}`}</h4>
-									<div className="pointer tooltip" /* style={{position:"relative"}} */ onClick={()=>{removeHelper(index)}}>
+									<h4 style={{ marginBottom: "16px", fontSize: "24px", fontWeight: "bold" }}>{`${t("FSM_HELPER_LABEL")} ${index + 1}`}</h4>
+									<div className="pointer tooltip" /* style={{position:"relative"}} */ onClick={() => { removeHelper(index) }}>
 										<div style={{ display: "flex", /* alignItems: "center", */ gap: "0 4px" }}>
 											<DustbinIcon />
 											<span className="tooltiptext" style={{ position: "absolute", width: "100px", marginLeft: "50%", fontSize: "medium" }}>
@@ -116,22 +144,24 @@ const SelectGraimaHelper = ({ t, config, onSelect, formData = {}, errors }) => {
 									</React.Fragment>
 								))}
 							</React.Fragment>
-
 						</Card>
 					</React.Fragment>
 				))}
 			</React.Fragment>
 			<button className={`unstyled-button link : ""`} type="button" onClick={() => { addExtraHelperDetails() }} disabled={false}>
-				{t("Add Helper")}
+				{t("ADD_HELPER")}
 			</button>
-			
+			{showToast && (
+				<Toast
+					error={showToast.key === "error" ? true : false}
+					label={t(showToast.key === "success" ? showToast.action : `COMMON_NO_RESULTS_FOUND`)}
+					onClose={closeToast}
+				/>
+			)}
 		</div>
 
-
 	)
-	// : (
-	//   <Loader />
-	// );
+
 };
 
 export default SelectGraimaHelper;

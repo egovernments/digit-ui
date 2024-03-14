@@ -184,12 +184,13 @@ export const FSMService = {
       params: { tenantId },
       auth: true,
     }),
-  searchGarimaDetails: (details, tenantId) =>
+  searchGarimaDetails: (filters, tenantId) =>
   Request({
-    url: `/fsm/v1/_searchGarimaWorker?garimaId=${details}`,
+    url: Urls.fsm.searchGarimaWorker,
     useCache: false,
-    userService: true,
-    method: "GET",
-    auth: true,
+      method: "POST",
+      auth: true,
+      userService: false,
+      params: { ...filters }
   }),
 };

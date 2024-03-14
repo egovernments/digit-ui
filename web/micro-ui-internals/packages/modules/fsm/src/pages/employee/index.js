@@ -90,7 +90,7 @@ export const FsmBreadCrumb = ({ location }) => {
       content: t("ES_TITLE_APPLICATION_DETAILS"), 
       show: isApplicationDetails || isGarimaDetails, 
     },
-    { content: "Assign Vehicle and Worker", show: isGarimaDetails },
+    { content: t("FSM_ASSIGN_VEHICLE_AND_WORKER"), show: isGarimaDetails },
     { content: t("ES_TITLE_VEHICLE_LOG"), show: isVehicleLog },
     {
       path: "/digit-ui/employee/fsm/registry/vendor-details/" + id,
@@ -186,7 +186,7 @@ const EmployeeApp = ({ path, url, userType }) => {
 
   const Inbox = Digit.ComponentRegistryService.getComponent("FSMEmpInbox");
   const FstpInbox = Digit.ComponentRegistryService.getComponent("FSMFstpInbox");
-  const NewApplication = Digit.ComponentRegistryService.getComponent("FSMEditApplication");
+  const NewApplication = Digit.ComponentRegistryService.getComponent("FSMNewApplicationEmp");
   const EmployeeApplicationDetails = Digit.ComponentRegistryService.getComponent("FSMEmployeeApplicationDetails");
   const EmployeeGarimaDetails = Digit.ComponentRegistryService.getComponent("EmployeeGarimaDetails");
   const FstpOperatorDetails = Digit.ComponentRegistryService.getComponent("FSMFstpOperatorDetails");
@@ -196,8 +196,8 @@ const EmployeeApp = ({ path, url, userType }) => {
   const FSMLinks = Digit.ComponentRegistryService.getComponent("FSMLinks");
   const FSTPO = Digit.UserService.hasAccess(["FSM_EMP_FSTPO"]);
   const FSMRegistry = Digit.ComponentRegistryService.getComponent("FSMRegistry");
-  const VendorDetails = Digit.ComponentRegistryService.getComponent("VendorDetails");= Digit.ComponentRegistryService.getComponent("FSMNewApplicationEmp");
-  const EditApplication 
+  const VendorDetails = Digit.ComponentRegistryService.getComponent("VendorDetails");
+  const EditApplication = Digit.ComponentRegistryService.getComponent("FSMEditApplication");
   const AddVendor = Digit.ComponentRegistryService.getComponent("AddVendor");
   const EditVendor = Digit.ComponentRegistryService.getComponent("EditVendor");
   const VehicleDetails = Digit.ComponentRegistryService.getComponent("VehicleDetails");

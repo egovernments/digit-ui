@@ -22,6 +22,7 @@ module.exports = function (app) {
     "/user-otp",
     "/user",
     "/fsm",
+    "/impel-fsm",
     "/billing-service",
     "/collection-services",
     "/pdf-service",

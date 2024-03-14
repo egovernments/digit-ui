@@ -107,7 +107,26 @@ export const Search = {
         ? demandDetails?.Demands[0]?.demandDetails[demandDetails?.Demands[0]?.demandDetails.length - 1]?.collectionAmount > 0
         : demandDetails?.Demands[0]?.demandDetails[0]?.collectionAmount > 0;
 
-    const employeeResponse = [
+        let sanitationWorkerDetails = [] //Show sanition worker information after DSO Changes
+        if(response?.sanitationWorker?.length){
+          response?.sanitationWorker?.map((ele, index)=>{
+            if (ele.workerType === "DRIVER"){
+              sanitationWorkerDetails.push(
+                {
+                  title: "ES_APPLICATION_DETAILS_ASSIGNED_DRIVER", value: `${response?.sanitationWorker[index].name} | ${response?.sanitationWorker[index].garima_id}`
+                }
+              )
+            }else{
+              sanitationWorkerDetails.push(
+                {
+                  title: `${FSM_SANITATION_WORKER} ${index}`, value: `${response?.sanitationWorker[index].name} | ${response?.sanitationWorker[index].garima_id}`
+                }
+              )
+            }
+          })
+        }
+    
+        const employeeResponse = [
       {
         title: "ES_TITLE_APPLICATION_DETAILS",
         values: [
@@ -225,6 +244,7 @@ export const Search = {
           { title: "ES_APPLICATION_DETAILS_VEHICLE_NO", value: vehicle?.registrationNumber || "N/A" },
           { title: "ES_APPLICATION_DETAILS_VEHICLE_CAPACITY", value: response?.vehicleCapacity || "N/A" },
           { title: "ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE", value: displayServiceDate(response?.possibleServiceDate) || "N/A" },
+          ...sanitationWorkerDetails
         ],
       },
     ];

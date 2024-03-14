@@ -36,7 +36,7 @@ const Urls = {
   fsm: {
     search: "/fsm/v1/_search",
     create: "/fsm/v1/_create",
-    update: "/fsm/v1/_update",
+    update: "/impel-fsm/v1/_update",
     vendorSearch: "/vendor/v1/_search",
     vehicleSearch: "/vehicle/v1/_search",
     audit: "/fsm/v1/_audit",
@@ -52,7 +52,9 @@ const Urls = {
     updateDriver: "/vendor/driver/v1/_update",
     vehicleTripCreate: "/vehicle/trip/v1/_create",
     advanceBalanceCalculate: "/fsm-calculator/v1/_advancebalancecalculate",
-    createGarimaWorker: "/fsm/v1/_createGarimaWorker",
+    createGarimaWorker: "/impel-fsm/v1/_createGarimaWorker",
+    searchGarimaWorker: "/impel-fsm/v1/_searchGarimaWorker"
+
   },
 
   payment: {

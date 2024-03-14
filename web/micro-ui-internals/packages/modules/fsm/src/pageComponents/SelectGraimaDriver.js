@@ -1,26 +1,29 @@
-import React, { useState } from "react";
-import { LabelFieldPair, CardLabel, TextInput, CardLabelError, Dropdown } from "@egovernments/digit-ui-react-components";
+import React, { useState, useEffect } from "react";
+import { LabelFieldPair, CardLabel, TextInput, CardLabelError, Dropdown, Loader, Toast } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 
 const SelectGraimaDriver = ({ t, config, onSelect, formData = {}, errors }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  
-  let inputs = [
-    {
-      label: "Assign Driver",
-      type: "text",
-      name: "garimaDriverName",
-      validation: {
-        isRequired: true,
-        pattern: "^[a-zA-Z]+( [a-zA-Z]+)*$",
-        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
-      },
-      isMandatory: true,
+  const [showToast, setShowToast] = useState(null);
+
+  const [inputs, setInputs] = useState([{
+    label: "ASSIGN_DRIVER",
+    type: "text",
+    name: "garima_id",
+    validation: {
+      isRequired: true,
+      pattern: "^[A-Za-z][0-9]{8}$",
+      title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
+      maxlength: "9",
+      minlength: "9",
     },
+    isMandatory: true,
+    value:""
+  },
     {
-      label: "Add Driver's Mobile Number",
+      label: "ADD_DRIVER_MOBILE_NUMBER",
       type: "text",
-      name: "garimaDriverMobileNumber",
+      name: "mobile_number",
       validation: {
         isRequired: true,
         pattern: "[6-9]{1}[0-9]{9}",
@@ -29,24 +32,78 @@ const SelectGraimaDriver = ({ t, config, onSelect, formData = {}, errors }) => {
       },
       componentInFront: <div className="employee-card-input employee-card-input--front">+91</div>,
       isMandatory: true,
-    },
-  ]
+      value:""
+    }
+  ]);
 
-  const setValue = (value, input) =>{
+  const {
+    isLoading: isDriverLoading,
+    isError: isDriverError,
+    data: driverData,
+    error: driverError,
+    mutate,
+  } = Digit.Hooks.fsm.useGarimaSearchActions(tenantId);
+
+  const setValue = async (value, input) => {
     let garimaDriverDetails = formData.garimaDriverDetails || {};
     garimaDriverDetails[input] = value;
-    onSelect(config.key, { ...formData[config.key], garimaDriverDetails: garimaDriverDetails });
-    if (input === "garimaDriverName" && value?.length === 9){
-      config.searchGarimaWorkerDetails(value)
+    if (input === "garima_id" && value?.length === 9) {
+      mutate(value, {
+        onError: (error, variables) => { //Removing the values if error is found
+          formData.garimaDriverDetails = {};
+          let driverInputs = inputs;
+          driverInputs[0].value = "";
+          driverInputs[1].value = "";
+          setInputs(driverInputs);
+          onSelect("garimaDriverDetails", { ...formData.garimaDriverDetails  });
+          setShowToast({ key: "error", action: error });
+          setTimeout(closeToast, 50000);
+        },
+        onSuccess: (data, variables) => {
+          Object.keys(data[0]).map((ele)=>{
+            garimaDriverDetails[ele] = data[0][ele]
+          })
+          garimaDriverDetails.workerType = "DRIVER"; 
+          
+          onSelect(config.key, { ...garimaDriverDetails });
+          let driverInputs = inputs;
+          driverInputs[0].value = value;
+          driverInputs[1].value = data[0].mobile_number;
+          setInputs(driverInputs)
+        },
+      });
+
+    }else{
+      let driverInputs = inputs;
+      input === "garima_id" ? driverInputs[0].value = value : driverInputs[1].value = value;
+      setInputs(driverInputs)
+      onSelect(config.key, { ...garimaDriverDetails });
     }
-      
   }
+
+  const closeToast = () => {
+    setShowToast(null);
+  };
+
+  const showDriverNumber = (input) =>{ //Check the conditon to show the driver mobile number
+    if (input.name === "garima_id"){
+      return true
+    }else{
+      if (input.value || formData?.garimaDriverDetails?.mobile_number){
+        return true
+      }else {
+        return false
+      }
+    }
+  }
+
+  console.log(formData,"formData");
 
   return (
     <div>
       {inputs?.map((input, index) => (
         <React.Fragment key={index}>
-          {input.type === "text" && (
+          {input.type === "text" && showDriverNumber(input) && (
             <React.Fragment>
               {errors[input.name] && <CardLabelError>{t(input.error)}</CardLabelError>}
               <LabelFieldPair>
@@ -58,8 +115,8 @@ const SelectGraimaDriver = ({ t, config, onSelect, formData = {}, errors }) => {
                   {input.componentInFront ? input.componentInFront : null}
                   <TextInput
                     key={input.name}
-                    value={formData && formData[config.key] ? formData[config.key][input.name] : null}
-                    onChange={(e)=>setValue(e.target.value, input.name)}
+                    value={input.value || formData && formData[config.key] ? formData[config.key][input.name] : null}
+                    onChange={(e) => setValue(e.target.value, input.name)}
                     disable={false}
                     {...input.validation}
                   />
@@ -69,13 +126,19 @@ const SelectGraimaDriver = ({ t, config, onSelect, formData = {}, errors }) => {
           )}
         </React.Fragment>
       ))}
+      {showToast && (
+        <Toast
+          error={showToast.key === "error" ? true : false}
+          label={t(showToast.key === "success" ? showToast.action : `COMMON_NO_RESULTS_FOUND`)}
+          onClose={closeToast}
+        />
+      )}
+      
     </div>
 
 
   )
-  // : (
-  //   <Loader />
-  // );
+  
 };
 
 export default SelectGraimaDriver;
