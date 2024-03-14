@@ -153,21 +153,20 @@ const TqmCard = ({ reRoute = true }) => {
     delete propsForModuleCard.links[2];
   }
 
+
   if (reRoute) {
-    if (userRoles.length === 1) {
-      const role = userRoles[0];
+    const pqmRolesPresent = userRoles.some(role => role.startsWith("PQM_"));
+    if (pqmRolesPresent) {
       let redirectUrl;
-      switch (role) {
-        case "PQM_TP_OPERATOR":
-          redirectUrl = "/tqm-ui/employee/tqm/landing";
-          break;
-        case "PQM_ADMIN":
-          redirectUrl = "/tqm-ui/employee";
-          break;
-      }
-      window.location.href = redirectUrl;
+      if (userRoles.includes("PQM_TP_OPERATOR")) {
+        redirectUrl = "/tqm-ui/employee/tqm/landing";
+    } else if (userRoles.includes("PQM_ADMIN")) {
+        redirectUrl = "/tqm-ui/employee";
+    }
+    window.location.href = redirectUrl
     }
   }
+  
 
   if (isLoading) {
     return <Loader />;
