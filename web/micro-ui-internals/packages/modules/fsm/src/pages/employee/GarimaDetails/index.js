@@ -50,7 +50,6 @@ const GarimaDetails = (props) => {
 
     const onSubmit = (data) => {
         let sanitationDetails = [data.garimaDriverDetails,...data.garimaHelperDetails.helperList];
-        console.log(applicationData,"applicationData")
         
         const createPayload = {
             "fsm":{
