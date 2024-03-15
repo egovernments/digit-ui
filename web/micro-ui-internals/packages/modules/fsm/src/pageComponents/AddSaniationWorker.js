@@ -100,14 +100,13 @@ const AddSaniationWorker = ({ t, config, onSelect, formData = {}, userType }) =>
       };
       mutation.mutate(createPayload, {
         onError: (error, variables) => {
-          // console.log(error?.response?.data?.errors[Object.keys(error?.response?.data?.errors)[0]][0],"errrrrr ee1")
-          // console.log(error?.response?.data?.Errors[0].messag,"errrrrr ee2")
           let errorMSg = error?.response?.data?.errors[Object.keys(error?.response?.data?.errors)[0]][0];
           setShowToast({ key: "error", action: errorMSg || "Something Went Wrong" });
           setTimeout(closeToast, 5000);
         },
         onSuccess: (data) => {
           if (formData?.addSaniationWorker?.assignAs?.code === "GARIMA_DRIVER") { //Condition for checking and adding garima values for respective person
+            formData.garimaDriverDetails = {};
             Object.keys(data?.sanitationWorker).map((item)=>{
               formData.garimaDriverDetails[item] = data.sanitationWorker[item];
             })
@@ -119,7 +118,7 @@ const AddSaniationWorker = ({ t, config, onSelect, formData = {}, userType }) =>
             garimaHelperDetails.helperList.map((ele, index) => {
               if (!ele.garima_id) {
                 Object.keys(data?.sanitationWorker).map((item)=>{
-                  ele[item] = data.sanitationWorker[item];
+                  ele[item] = data?.sanitationWorker[item];
                 })
                 ele.workerType = "HELPER";
                 garimaHelperFlag = true;
@@ -130,7 +129,7 @@ const AddSaniationWorker = ({ t, config, onSelect, formData = {}, userType }) =>
                 workerType : "HELPER"
               };
               Object.keys(data?.sanitationWorker).map((item)=>{
-                tempData[item] = data.sanitationWorker[item];
+                tempData[item] = data?.sanitationWorker[item];
               })
               garimaHelperDetails.helperList.push(tempData)
             }

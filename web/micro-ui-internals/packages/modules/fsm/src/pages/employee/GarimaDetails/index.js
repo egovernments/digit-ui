@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { FormComposer, Loader, Header, Toast } from "@egovernments/digit-ui-react-components";
 import { set } from "lodash";
+import { Link, useHistory, useParams } from "react-router-dom";
 
 
 const GarimaDetails = (props) => {
@@ -13,6 +14,7 @@ const GarimaDetails = (props) => {
     const [ garimaApplicationData, setGarimaApplicatinData ] = useState("");
     const [ garimaDriverData, setGarimaDriverData ] = useState([])
     const [showToast, setShowToast] = useState(null);
+    const history = useHistory();
 
 
     const { data: vehicleList, isLoading: isVehicleData, isSuccess: isVehicleDataLoaded } = Digit.Hooks.fsm.useMDMS(

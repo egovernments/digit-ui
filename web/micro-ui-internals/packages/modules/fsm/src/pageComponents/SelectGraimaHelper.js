@@ -159,9 +159,7 @@ const SelectGraimaHelper = ({ t, config, onSelect, formData = {}, errors }) => {
 				/>
 			)}
 		</div>
-
 	)
-
 };
 
 export default SelectGraimaHelper;
