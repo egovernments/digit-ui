@@ -3,8 +3,6 @@ import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { FormComposer, Loader, Header, Toast } from "@egovernments/digit-ui-react-components";
 import { set } from "lodash";
-import { Link, useHistory, useParams } from "react-router-dom";
-
 
 const GarimaDetails = (props) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
