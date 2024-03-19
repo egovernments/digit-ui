@@ -51,32 +51,7 @@ const TqmCard = ({ reRoute = true }) => {
       },
     },
   };
-  // const requestCriteriaPlantUsers = {
-  //   params: {},
-  //   url: "/pqm-service/plant/user/v1/_search",
-  //   body: {
-  //     plantUserSearchCriteria: {
-  //       tenantId,
-  //       // "plantCodes": [],
-  //       plantUserUuids: userInfo?.info?.uuid ? [userInfo?.info?.uuid] : [],
-  //       additionalDetails: {},
-  //     },
-  //     pagination: {},
-  //   },
-  //   config: {
-  //     select: (data) => {
-  //       let userPlants = data?.plantUsers
-  //         ?.map((row) => {
-  //           row.i18nKey = `PQM_PLANT_${row?.plantCode}`;
-  //           return row;
-  //         })
-  //         ?.filter((row) => row.isActive);
-  //       // userPlants.push({i18nKey:"PQM_PLANT_DEFAULT_ALL"})
-  //       Digit.SessionStorage.set("user_plants", userPlants);
-  //       return userPlants;
-  //     },
-  //   },
-  // };
+
   const { isLoading: isLoadingPlantUsers, data: dataPlantUsers } = Digit.Hooks.useCustomAPIHook(requestCriteriaPlantUsers);
   const requestCriteria = {
     url: "/inbox/v2/_search",
@@ -116,35 +91,14 @@ const TqmCard = ({ reRoute = true }) => {
 
   let links = [
     {
-      label: t("TQM_INBOX"),
-      link: `/tqm-ui/employee/tqm/inbox`,
-      roles: [...ROLES.plant, ROLES.ulb],
-      count: isLoading ? "-" : tqmInboxData?.totalCount ? String(tqmInboxData?.totalCount) : "0",
-    },
-    {
-      label: t("TQM_VIEW_PAST_RESULTS"),
-      link: `/tqm-ui/employee/tqm/search-test-results`,
-      roles: [...ROLES.plant, ROLES.ulb],
-    },
-
-    {
-      label: t("TQM_ADD_TEST_RESULT"),
-      link: `/tqm-ui/employee/tqm/add-test-result`,
-      roles: [...ROLES.ulb],
+      label: t("TQM_MONITOR"),
+      link: userRoles?.includes("PQM_ADMIN") ? `/tqm-ui/employee` : `tqm-ui/employee/tqm/landing`,
     },
   ];
-  links = links.filter((link) => (link.roles ? checkForEmployee(link.roles) : true));
 
   const propsForModuleCard = {
     Icon: <ShippingTruck />,
     moduleName: t("ACTION_TEST_TQM"),
-    kpis: [
-      {
-        count: isLoading ? "-" : tqmInboxData?.totalCount,
-        label: t("TQM_KPI_PENDING_TESTS"),
-        link: `/tqm-ui/employee/tqm/inbox`,
-      },
-    ],
     links: links,
   };
 
