@@ -92,7 +92,7 @@ const TqmCard = ({ reRoute = true }) => {
   let links = [
     {
       label: t("TQM_MONITOR"),
-      link: userRoles?.includes("PQM_ADMIN") ? `/tqm-ui/employee` : `tqm-ui/employee/tqm/landing`,
+      link: userRoles?.includes("PQM_ADMIN") ? `/tqm-ui/employee` : `/tqm-ui/employee/tqm/landing`,
     },
   ];
 
