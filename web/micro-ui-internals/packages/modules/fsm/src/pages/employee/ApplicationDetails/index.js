@@ -98,6 +98,7 @@ const ApplicationDetails = (props) => {
   }
   
   useEffect(() => {
+    console.log(selectedAction,"selectedAction")
     switch (selectedAction) {
       case "SCHEDULE":
       case "DSO_ACCEPT":
