@@ -2,6 +2,7 @@ import { Loader, Modal, FormComposer, Toast } from "@egovernments/digit-ui-react
 import React, { useState, useEffect } from "react";
 import { useQueryClient } from "react-query";
 import { UploadPitPhoto } from "@egovernments/digit-ui-react-components";
+import { Link, useHistory, useParams } from "react-router-dom";
 
 import { configAssignDso, configCompleteApplication, configReassignDSO, configAcceptDso, configRejectApplication, configScheduleDso, configUpdateTrips, configRejectFstpo } from "../config";
 
@@ -62,6 +63,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   );
   const client = useQueryClient();
   const stateCode = Digit.ULBService.getStateId();
+  const history = useHistory();
   
   const { data: vehicleList, isLoading: isVehicleData, isSuccess: isVehicleDataLoaded } = Digit.Hooks.fsm.useMDMS(
     stateCode,
@@ -310,14 +312,10 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           })
         );
       case "DSO_ACCEPT":
+        return history.push("/digit-ui/employee/fsm/garima-details/" + applicationData?.applicationNo);
       case "ACCEPT":
         //TODO: add accept UI
         setFormValve(vehicleNo ? true : false);
-        console.log(
-          
-            vehicleNoList,"7",
-            
-          )
         return setConfig(
           configAcceptDso({
             t,
